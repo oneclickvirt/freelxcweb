@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="45px" height="33px" viewBox="0 0 45 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>chip</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="68.9587823%" y1="0%" x2="39.6484375%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFECC8" offset="0%"></stop>
+            <stop stop-color="#D1B978" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="14" y="6" width="17" height="21" rx="2"></rect>
+        <mask id="mask-3" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="17" height="21" fill="white">
+            <use xlink:href="#path-2"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="full-card-visa" transform="translate(-28.000000, -64.000000)">
+            <g id="chip" transform="translate(28.000000, 64.000000)">
+                <rect id="Rectangle-41" fill="url(#linearGradient-1)" fill-rule="evenodd" x="6.53699317e-13" y="-1.70530257e-13" width="45" height="33" rx="4.5"></rect>
+                <use id="Rectangle-6" stroke="#313131" mask="url(#mask-3)" stroke-width="2" xlink:href="#path-2"></use>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="30" y="10" width="15" height="1"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="22" y="0" width="1" height="7"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="22" y="26" width="1" height="7"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="30" y="16" width="15" height="1"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="30" y="22" width="15" height="1"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="0" y="10" width="15" height="1"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="0" y="16" width="15" height="1"></rect>
+                <rect id="Rectangle-9" fill="#313131" fill-rule="evenodd" x="0" y="22" width="15" height="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>
