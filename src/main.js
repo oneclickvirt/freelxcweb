@@ -21,6 +21,16 @@ import plugins from './plugins' // plugins
 import base from './plugins/websocket/index' // plugins
 import { download } from '@/utils/request'
  
+//代码高亮插件
+// import hljs from "highlight.js/lib/highlight";
+// import hljs from 'highlight.js/lib/core';
+import "highlight.js/styles/github-gist.css";
+// import hljs from "highlight.js/lib/highlight";
+import "highlight.js/styles/github-gist.css";
+// import hljsVuePlugin from '@highlightjs/vue-plugin';
+import VueHighlightJS from 'vue-highlightjs'
+
+
 import './assets/icons' // icon
 import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
@@ -76,6 +86,9 @@ Vue.use(VueMeta)
 DictData.install()
 VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
+// TODO
+Vue.use(VueHighlightJS);
+// Vue.use(hljsVuePlugin);
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

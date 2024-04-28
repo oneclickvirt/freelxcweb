@@ -419,7 +419,7 @@ export default {
           },
           rootLimits: {},
           sourceConfig: [
-              {
+/*             {
                   "type": "image",
                   "alias": "debian/11",
                   "server": "https://mirrors.tuna.tsinghua.edu.cn/lxc-images",
@@ -439,6 +439,20 @@ export default {
                   "server": "https://mirrors.tuna.tsinghua.edu.cn/lxc-images",
                   "protocol": "simplestreams",
                   "mode": "pull"
+              }*/
+              {
+                "type": "image",
+                "alias": "debian/12",
+                "server": "https://images.opsmaru.dev/spaces/9bfad87bd318b8f06012059a",
+                "protocol": "simplestreams",
+                "mode": "pull"
+              },
+              {
+                "type": "image",
+                "alias": "ubuntu/22.04",
+                "server": "https://images.opsmaru.dev/spaces/9bfad87bd318b8f06012059a",
+                "protocol": "simplestreams",
+                "mode": "pull"
               }
           ]
         }

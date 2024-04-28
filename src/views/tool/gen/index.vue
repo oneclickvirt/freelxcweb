@@ -176,6 +176,8 @@
         >
           <el-link :underline="false" icon="el-icon-document-copy" v-clipboard:copy="value" v-clipboard:success="clipboardSuccess" style="float:right">复制</el-link>
           <pre><code class="hljs" v-html="highlightedCode(value, key)"></code></pre>
+          <!-- TODO -->
+          <!-- <highlightjs autodetect :code="value" /> -->
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -186,14 +188,27 @@
 <script>
 import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
 import importTable from "./importTable";
-import hljs from "highlight.js/lib/highlight";
-import "highlight.js/styles/github-gist.css";
-hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
-hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("html", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("vue", require("highlight.js/lib/languages/xml"));
-hljs.registerLanguage("javascript", require("highlight.js/lib/languages/javascript"));
-hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
+import hljs from 'highlight.js/lib/core';
+// import hljs from "highlight.js/lib/highlight";
+// import "highlight.js/styles/github-gist.css";
+// hljs.registerLanguage("java", require("highlight.js/lib/languages/java"));
+// hljs.registerLanguage("xml", require("highlight.js/lib/languages/xml"));
+// hljs.registerLanguage("html", require("highlight.js/lib/languages/xml"));
+// hljs.registerLanguage("vue", require("highlight.js/lib/languages/xml"));
+// hljs.registerLanguage("javascript", require("highlight.js/lib/languages/javascript"));
+// hljs.registerLanguage("sql", require("highlight.js/lib/languages/sql"));
+import javaLanguage from "highlight.js/lib/languages/java";
+import xmlLanguage from "highlight.js/lib/languages/xml";
+import htmlLanguage from "highlight.js/lib/languages/xml";
+import vueLanguage from "highlight.js/lib/languages/xml";
+import jsLanguage from "highlight.js/lib/languages/javascript";
+import sqlLanguage from "highlight.js/lib/languages/sql";
+hljs.registerLanguage("java", javaLanguage);
+hljs.registerLanguage("xml", xmlLanguage);
+hljs.registerLanguage("html", htmlLanguage);
+hljs.registerLanguage("vue", vueLanguage);
+hljs.registerLanguage("javascript", jsLanguage);
+hljs.registerLanguage("sql", sqlLanguage);
 
 export default {
   name: "Gen",

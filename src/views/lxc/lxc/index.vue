@@ -287,7 +287,8 @@
       :visible.sync="logDrawer"
       size="60%">
       <di class="h-full theme-github-dark" v-loading="logLoading">
-        <pre ><code class="hljs" v-html="highlightedCode(initLogs)"></code></pre>
+       <pre ><code class="hljs" v-html="highlightedCode(initLogs)"></code></pre>
+       <!-- <highlightjs autodetect :code="code" /> -->
       </di>
     </el-drawer>
 
@@ -440,9 +441,12 @@ import { listLxc, getLxc, delLxc, addLxc, updateLxc } from "@/api/lxc/lxcAdmin";
 // import { listBaseInfoAll } from "@/api/lxc/superLxc";
 import { listBaseInfoAll, addLxcMulti } from "@/api/lxc/superLxc";
 import { getInitLog } from "@/api/lxc/queue";
-import hljs from "highlight.js/lib/highlight";
-import "highlight.js/styles/github-dark.css";
-hljs.registerLanguage("basic", require("highlight.js/lib/languages/basic"));
+import hljs from 'highlight.js/lib/core';
+// import hljs from "highlight.js/lib/highlight";
+// import "highlight.js/styles/github-dark.css"; 
+import basicLanguage from "highlight.js/lib/languages/basic";
+// hljs.registerLanguage("basic", require("highlight.js/lib/languages/basic"));
+hljs.registerLanguage("basic", basicLanguage);
 
 
 export default {
