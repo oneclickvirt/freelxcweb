@@ -417,11 +417,11 @@
                     重置密码</v-btn
                   >
                 </div> -->
-              <!-- <div class="text-center">
-                  <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
-                    删除主机</v-btn
-                  >
-                </div> -->
+              <div class="text-center">
+                <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
+                  删除主机</v-btn
+                >
+              </div>
             </div>
           </div>
         </v-card>

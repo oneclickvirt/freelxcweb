@@ -188,6 +188,7 @@
 <script>
 import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/gen";
 import importTable from "./importTable";
+//在main.js中引入在该文件下用不了
 import hljs from 'highlight.js/lib/core';
 // import hljs from "highlight.js/lib/highlight";
 // import "highlight.js/styles/github-gist.css";

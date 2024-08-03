@@ -1,4 +1,4 @@
-<template>
+queryForm<template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="98px">
       <el-form-item :span="4" label="母鸡名称" prop="name">
@@ -131,6 +131,9 @@
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.ipv6Flag" />
         </template>
       </el-table-column>
+      <!-- ################## 这是从数据库中读出来的数据-->
+      <el-table-column label="创建小鸡方式" align="center" prop="way" />
+
       <el-table-column label="是否可开小鸡" align="center" key="superStatus">
         <template slot-scope="scope">
           <el-switch v-model="scope.row.superStatus" active-value="1" inactive-value="0" @change="handleSuperStatusChange(scope.row)"></el-switch>
@@ -247,7 +250,19 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
+        <!-- </el-row> -->
+        <!-- ##################################-->
+        <!-- <el-row> -->
+          <el-col :span="12">
+            <el-form-item label="创建小鸡方式">
+              <!-- v-model双向绑定很关键，在下面的数据data部分是用form来记录所有字段的值，然后form作为参数整个传到superLxc.js的addSuperLxc和updateSuperLxc中 -->
+              <el-select v-model="form.way" placeholder="请选择" @change="changeWay">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
+        
         <el-row>
           <el-col :span="12">
             <el-form-item label="可开小鸡数量" prop="maxQuantity">
@@ -337,7 +352,7 @@ import {
   delSuperLxc,
   addSuperLxc,
   updateSuperLxc,
-  changeSpuerStatus,
+  changeSuperStatus,
 } from "@/api/lxc/superLxc";
 import IpInput from "../../../components/IpInput/index.vue";
 import VueJsonPretty from 'vue-json-pretty';
@@ -387,6 +402,16 @@ export default {
       open: false,
       // 角色选项
       roleOptions: [],
+      // ###################
+      options: [{
+          value: 'lxd',
+          label: 'lxd'
+        }, {
+          value: 'incus',
+          label: 'incus'
+        }],
+      value: '',  // 选择器实际传递的值
+
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -395,6 +420,9 @@ export default {
         tag: undefined,
         ip: undefined,
         password: undefined,
+        // ####################
+        way: undefined,
+        
         sshPort: undefined,
         date: undefined,
         dead: undefined,
@@ -457,10 +485,61 @@ export default {
           ]
         }
       },
+      incusConfig: {
+        templateJson: {
+          instanceConfig: {
+            "limitsCpuAllowance": "25ms/100ms",
+            "limitsCpu": "1"
+          },
+          rootLimits: {},
+          sourceConfig: [
+            {
+              "type":"image",
+              "alias":"debian/12",
+              "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
+              "protocol":"simplestreams",
+              "mode":"pull"
+            },
+            {
+              "type":"image",
+              "alias":"ubuntu/22.04",
+              "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
+              "protocol":"simplestreams",
+              "mode":"pull"
+            }
+          ]
+        }
+      },
       // 表单参数
       form: {
-        sshPort: undefined,
+        // sshPort: undefined,
+        // ip: undefined,
+
+        id: undefined,
+        name: undefined,
+        tag: undefined,
         ip: undefined,
+        password: undefined,
+        sshPort: 22,
+        date: undefined,
+        dead: undefined,
+        createBy: undefined,
+        createTime: undefined,
+        updateBy: undefined,
+        updateTime: undefined,
+        superStatus: "1",
+        expireFlag: "N",
+        sshPortStart: 20000,
+        memoryLimit: 256,
+        diskLimit: 1,
+        maxQuantity: undefined,
+        netStartPort: 30000,
+        netStep: 20,
+        upLimit: 300,
+        downLimit: 300,
+        ipv6Flag: "N",
+        way: undefined,
+        prefix: undefined,
 
       },
       testJson: {
@@ -496,7 +575,7 @@ export default {
             message: "母鸡密码不能为空",
             trigger: "blur",
           },
-        ],
+        ],        
         sshPort: [
           {
             required: true,
@@ -602,6 +681,14 @@ export default {
             trigger: "blur",
           },
         ],
+        // ##############################
+        way: [
+          {
+            required: true,
+            message: "创建小鸡的方式不能为空",
+            trigger: "blur",
+          }
+        ],
         rootLimits: [
           {
             // 必须为JSON
@@ -633,6 +720,17 @@ export default {
     };
   },
   watch: {
+    // "form.way": {
+    //   handler: function (val,oldVal) {
+    //     // console.log('val:',val);
+    //     if("lxd" === this.form.way) {
+    //       this.form.instanceConfig = this.default.templateJson.sourceConfig;
+    //     }else if("incus" === this.form.way){
+    //       this.form.instanceConfig = this.incusConfig.templateJson.sourceConfig;
+    //     }
+    //   }
+    // },
+
     "templateJson.rootLimits": {
       handler: function (val, oldVal) {
         console.log('val:', val);
@@ -684,6 +782,15 @@ export default {
     next(); //切记操作完一定要记得放行,否则无法正常跳转页面
   },
   methods: {
+    changeWay(val) {
+      console.log(val)
+      if("lxd" === this.form.way) {
+        this.templateJson.sourceConfig = this.default.templateJson.sourceConfig;
+      }else if("incus" === this.form.way){
+        this.templateJson.sourceConfig = this.incusConfig.templateJson.sourceConfig;
+      }
+    },
+
     onRootLimitsError(value) {
       this.form.rootLimits = "{";
     },
@@ -737,6 +844,7 @@ export default {
         upLimit: 300,
         downLimit: 300,
         ipv6Flag: "N",
+        way: undefined,
         prefix: undefined,
       };
       this.resetForm("form");

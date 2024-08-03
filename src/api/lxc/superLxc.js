@@ -64,7 +64,7 @@ export function delSuperLxc(id) {
 }
 
 // 改变母鸡开小鸡限制
-export function changeSpuerStatus(id, superStatus) {
+export function changeSuperStatus(id, superStatus) {
   const data = {
     id,
     superStatus

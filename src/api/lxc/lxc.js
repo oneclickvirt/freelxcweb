@@ -42,7 +42,7 @@ export function applyLxc(data) {
     },
     method: "post",
     data: data,
-    timeout: 60000,
+    timeout: 600000,
   });
 }
 

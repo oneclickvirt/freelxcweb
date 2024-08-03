@@ -441,6 +441,7 @@ import { listLxc, getLxc, delLxc, addLxc, updateLxc } from "@/api/lxc/lxcAdmin";
 // import { listBaseInfoAll } from "@/api/lxc/superLxc";
 import { listBaseInfoAll, addLxcMulti } from "@/api/lxc/superLxc";
 import { getInitLog } from "@/api/lxc/queue";
+//导入hljs，调用registerLanguage函数注册语言，单独引入语言而不引入整个highlight包能减少占用
 import hljs from 'highlight.js/lib/core';
 // import hljs from "highlight.js/lib/highlight";
 // import "highlight.js/styles/github-dark.css"; 

@@ -28,6 +28,8 @@ export class sshWS {
     } = {}) {
       let loc = window.location;
     //   url = loc.host + "/" + url;
+    
+      // this.url = 'ws://127.0.0.1:8088/' + url;
       this.url = 'ws://127.0.0.1:8088/' + url;
     //   this.url = /https/.test(loc.protocol) ? "wss://" + url : "ws://" + url;
       this.websocket = "WebSocket" in window ? new WebSocket(this.url) : null;
