@@ -50,3 +50,11 @@ export function getInitLog(id) {
     method: 'get',
   })
 }
+
+// 重建小鸡20240904
+export function resetLxcQueue(childName) {
+  return request({
+    url: '/lxc/queue/resetLxc/' + childName,
+    method: 'post',
+  })
+}

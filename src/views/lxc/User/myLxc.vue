@@ -412,6 +412,14 @@
                   关 机
                 </v-btn>
               </div>
+              <!-- 重建btn -->
+              <!-- 应该要新写一个函数  -->
+              <div class="text-center">
+                <v-btn rounded color="warning" dark @click="lxcModify('reset')">
+                  重 建
+                </v-btn>
+              </div>
+
               <!-- <div class="text-center">
                   <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
                     重置密码</v-btn
@@ -462,6 +470,9 @@ import {
   ping,
   getNetImage
 } from "@/api/lxc/lxc.js";
+import {
+  resetLxcQueue
+} from "@/api/lxc/queue.js";
 import { mapGetters, mapState } from "vuex";
 import { loginLxc, userNav } from "@/api/login";
 import { listWebsiteNotice } from "@/api/system/notice";
@@ -472,6 +483,7 @@ export default {
     // ...mapState(["userinfo"]),
   },
   data: () => ({
+    childName: "",
     lxcDeleteDialog: false,
     lxcId: "",
     lxcPassword: "",
@@ -512,6 +524,14 @@ export default {
     }
   },
   methods: {
+    // resetLxcQueue(childName) {
+    //   resetLxcQueue(childName).then(res => {
+    //     this.$message.success(res.msg);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+    // },
     getNetImage(lxcId, type) {
       getNetImage(lxcId, type).then(res => {
         this.netImageSrc = URL.createObjectURL(new Blob([res]));
@@ -600,6 +620,7 @@ export default {
           this.lxcPortEnd = response.data.portEnd;
           this.netUsage = response.data.netUsage;
           this.lxcIp = response.data.ip;
+          this.childName = response.data.childName;
           this.lxcPassword = response.data.password;
           this.lxcId = lxcId;
           this.lxcModifyDialog = true;
@@ -612,12 +633,14 @@ export default {
       var data = {
         lxcId: this.lxcId,
         modifyType: type,
+        childName: this.childName,
       };
       this.lxcModifyDialog = false;
       if (this.lxcDeleteDialog) this.lxcDeleteDialog = false;
       this.overlay = true;
       let _this = this;
-      modifyLxc(data)
+      if(data.modifyType=='reset') {
+        resetLxcQueue(data.childName)
         .then((response) => {
           this.overlay = false;
           this.tipSnackbarText = response.msg;
@@ -628,6 +651,20 @@ export default {
           _this.overlay = false;
           console.log(error);
         });
+      } else{
+        modifyLxc(data)
+        .then((response) => {
+          this.overlay = false;
+          this.tipSnackbarText = response.msg;
+          this.tipSnackbar = true;
+          this.userLxcList();
+        })
+        .catch(function (error) {
+          _this.overlay = false;
+          console.log(error);
+        });
+      }
+      
     },
     handleLxcMenuClick(myLxc, method) {
       switch (method) {

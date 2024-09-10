@@ -338,6 +338,7 @@ export default {
   data: () => ({
     lxcDeleteDialog: false,
     lxcId: "",
+    lxcChildName: "",
     lxcPassword: "",
     lxcModifyDialog: false,
     lxcPortStart: "",
@@ -500,6 +501,7 @@ export default {
           this.lxcPortEnd = response.data.portEnd;
           this.netUsage = response.data.netUsage;
           this.lxcIp = response.data.ip;
+          this.lxcChildName = response.data.childName;
           this.lxcPassword = response.data.password;
           this.lxcId = lxcId;
           this.lxcModifyDialog = true;

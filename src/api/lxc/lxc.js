@@ -114,3 +114,4 @@ export function getNetImage(lxcId, type) {
     responseType:'blob'
   });
 }
+
