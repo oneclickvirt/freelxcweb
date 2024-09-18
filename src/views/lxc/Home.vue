@@ -1,182 +1,108 @@
 <template>
-  <div id="home">
-    <v-banner initial>
-      <v-icon slot="icon" color="primary" size="30">
-        mdi-information-outline
-      </v-icon>
+  <div id="home" class="bg-gray-50">
+    <v-banner initial class="mb-6">
+      <template v-slot:icon>
+        <v-icon color="primary" size="30">mdi-information-outline</v-icon>
+      </template>
       <div v-if="notice" v-html="notice" class="notice"></div>
-
-      <!-- <template v-slot:actions>
-        <v-btn color="primary" text> Connection Settings </v-btn>
-      </template> -->
     </v-banner>
-    <div class="grid xl:grid-cols-10 grid-cols-1 gap-10 m-8">
-      <div class="xl:col-span-6">
-        <video
-          src="https://jihulab.com/darkland/lxc_files/-/raw/main/0bknv3_-_02.mp4?inline=false"
-          loop
-          autoplay="autoplay"
-          muted
-        ></video>
-        <!-- <lottie-player style="width: 100%; height: 100%" src="https://assets7.lottiefiles.com/packages/lf20_3jezq8s4.json" speed="1" loop autoplay></lottie-player> -->
+
+    <div class="grid grid-cols-1 xl:grid-cols-12 gap-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-12">
+      <div class="xl:col-span-7">
+        <video src="https://jihulab.com/darkland/lxc_files/-/raw/main/0bknv3_-_02.mp4?inline=false" loop
+          autoplay="autoplay" muted class="w-full rounded-xl shadow-2xl"></video>
       </div>
 
-      <div class="xl:col-span-4">
-        <div class="xl:mt-8">
-          <div class="text-5xl font-extrabold text-center">
-            <span
-              class="bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500"
-            >
+      <div class="xl:col-span-5 flex flex-col justify-center">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl xl:text-5xl font-extrabold mb-4">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-green-500">
               spiritlhl的免费LXC申请网站
             </span>
-            <p
-              class="xl:mt-10 sm:mt-5 text-base sm:text-xl text-center font-black text-gray-400"
-            >
-              你可以在这里申请到你想要的小鸡
-            </p>
-          </div>
+          </h1>
+          <p class="text-xl text-gray-600">
+            你可以在这里申请到你想要的小鸡
+          </p>
+        </div>
 
-          <div class="space-y-10 xl:mt-10 sm:mt-5">
-            <div v-for="(topTagItem, i) in hoemTopTagItem" :key="i">
-              <div
-                class="shadow-lg rounded-lg w-full ring-blue-500 text-center ring-2"
-              >
-                <p class="text-blue-500 font-black p-4">
-                  {{ topTagItem }}
-                </p>
-              </div>
-            </div>
+        <div class="space-y-4 mb-10">
+          <div v-for="(topTagItem, i) in hoemTopTagItem" :key="i"
+            class="p-4 bg-blue-50 rounded-lg border-2 border-blue-200 shadow-md transition-all duration-300 hover:shadow-lg hover:border-blue-300">
+            <p class="text-blue-700 font-bold">{{ topTagItem }}</p>
           </div>
+        </div>
 
-          <div class="mt-14 text-center">
-            <v-btn
-              class="ma-2 animate-bounce"
-              @click="toHome"
-              large
-              fab
-              color="primary"
-            >
-              <v-icon dark>mdi-arrow-down-thick</v-icon>
-            </v-btn>
-          </div>
+        <div class="text-center">
+          <v-btn @click="toHome" x-large fab color="primary" class="animate-bounce shadow-lg">
+            <v-icon dark>mdi-arrow-down-thick</v-icon>
+          </v-btn>
         </div>
       </div>
     </div>
 
     <v-divider></v-divider>
 
-    <v-container class="mt-6">
-      <div :id="'home'" class="grid xl:grid-cols-10 grid-cols-1 gap-10">
-        <div @click="showTosDialog" class="xl:col-span-4 grid-cols-1">
-          <v-carousel
-            :show-arrows="false"
-            height="310"
-            style="background-color: rgb(24 118 210 / 91%)"
-            class="cursor-pointer mx-auto w-full rounded-lg relative"
-            cycle
-            hide-delimiter-background
-            show-arrows-on-hover
-          >
-            <!-- hide-delimiters -->
+    <v-container class="mt-12 mb-16">
+      <div :id="'home'" class="grid grid-cols-1 xl:grid-cols-12 gap-10">
+        <div @click="showTosDialog" class="xl:col-span-4 cursor-pointer">
+          <v-carousel :show-arrows="false" height="310" class="rounded-xl overflow-hidden shadow-xl" cycle
+            hide-delimiter-background show-arrows-on-hover>
             <v-carousel-item v-for="(topImage, i) in topImageItem" :key="i">
-              <v-sheet color="white">
-                <icon-park
-                  style="background-color: rgb(24 118 210 / 91%)"
-                  class="mt-4 flex flex-column align-center"
-                  type="announcement"
-                  theme="outline"
-                  size="210"
-                  fill="#ffffff"
-                />
+              <v-sheet color="primary" class="fill-height">
+                <div class="d-flex fill-height justify-center align-center">
+                  <icon-park type="announcement" theme="outline" size="180" fill="#ffffff" />
+                </div>
               </v-sheet>
             </v-carousel-item>
-            <div
-              class="w-full absolute inset-x-0 bottom-0 bg-gray-900 bg-opacity-50"
-            >
-              <p class="font-grey font-weight-bold text-white mt-5 ml-6">
-                用户须知
-              </p>
+            <div class="absolute inset-x-0 bottom-0 bg-gray-900 bg-opacity-60 py-3">
+              <p class="font-bold text-white text-center text-lg">用户须知</p>
             </div>
           </v-carousel>
         </div>
-        <div class="xl:col-span-6 grid-cols-1">
-          <div class="grid xl:grid-cols-3 grid-cols-1 gap-5">
-            <div
-              v-ripple
-              v-for="(homeFunction, i) in homeFunctionItem"
-              :key="i"
-              style="background-color: rgb(24 118 210 / 91%)"
-              class="cursor-pointer overflow-hidden rounded-lg relative h-36 w-full bg-img"
-              @click="jumpUrl(homeFunction)"
-            >
-              <icon-park
-                class="mt-2 flex flex-column align-center"
-                :type="homeFunction.ico"
-                theme="outline"
-                size="95"
-                fill="#ffffff"
-              />
-              <div
-                class="flex rounded-b-lg justify-center w-full absolute inset-x-0 bottom-0 bg-gray-900 bg-opacity-50 h-8"
-              >
-                <p class="font-black text-white m-1">
-                  {{ homeFunction.title }}
-                </p>
-              </div>
+
+        <div class="xl:col-span-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div v-ripple v-for="(homeFunction, i) in homeFunctionItem" :key="i"
+              class="cursor-pointer overflow-hidden rounded-xl relative h-44 flex flex-col justify-center items-center transition-all duration-300 hover:shadow-xl hover:scale-105 bg-gradient-to-br from-blue-500 to-blue-600"
+              @click="jumpUrl(homeFunction)">
+              <icon-park :type="homeFunction.ico" theme="outline" size="70" fill="#ffffff" class="mb-3" />
+              <p class="font-bold text-white text-center text-lg">
+                {{ homeFunction.title }}
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      <v-divider class="mt-10 mb-2"></v-divider>
+      <v-divider class="my-16"></v-divider>
 
-      <div class="grid xl:grid-cols-2 grid-cols-1 gap-0 mt-10 justify-center">
-        <div id="bar_chart" class="w-full h-96"></div>
-        <div id="bar_chart_used" class="w-full h-96"></div>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+        <div id="bar_chart" class="h-96 bg-white rounded-xl shadow-lg p-4"></div>
+        <div id="bar_chart_used" class="h-96 bg-white rounded-xl shadow-lg p-4"></div>
       </div>
 
       <v-dialog v-model="sponsorDialog" persistent max-width="400">
         <v-card>
-          <v-card-title>
-            <v-card-text class="text-h4 text-center">赞助我们</v-card-text>
-          </v-card-title>
-          <v-img
-            :src="sponsorImgUrl"
-            alt="赞助我们"
-            aspect-ratio="1"
-            contain
-            class="lighten-2"
-          >
+          <v-card-title class="text-h4 text-center pb-0">赞助我们</v-card-title>
+          <v-img :src="sponsorImgUrl" alt="赞助我们" aspect-ratio="1" contain class="bg-gray-100">
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
+                <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
               </v-row>
             </template>
           </v-img>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <span v-bind="attrs" v-on="on">
-                <v-card-text
-                v-clipboard:copy="'TZ7nf8XAL9zQUo63xokazaBdCPeCgPfcwd'" v-clipboard:success="clipboardSuccess"
-                  class="mt-4 text-center cursor-pointer"
-                >
-                  TZ7nf8XAL9zQUo63xokazaBdCPeCgPfcwd
-                </v-card-text>
-              </span>
+              <v-card-text v-bind="attrs" v-on="on" v-clipboard:copy="'TZ7nf8XAL9zQUo63xokazaBdCPeCgPfcwd'"
+                v-clipboard:success="clipboardSuccess" class="mt-4 text-center cursor-pointer">
+                TZ7nf8XAL9zQUo63xokazaBdCPeCgPfcwd
+              </v-card-text>
             </template>
             <span>点击复制</span>
           </v-tooltip>
-
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn
-              color="light-blue darken-2 darken-1"
-              text
-              @click="sponsorDialog = false"
-            >
+            <v-btn color="primary" text @click="sponsorDialog = false">
               再想想
             </v-btn>
           </v-card-actions>
@@ -185,18 +111,12 @@
 
       <v-dialog v-model="tosDialog" persistent max-width="850">
         <v-card>
-          <v-card-title class="m-0">
-            <v-card-text class="text-h4 text-center">{{
-              tos.title
-            }}</v-card-text>
-          </v-card-title>
+          <v-card-title class="text-h4 text-center">{{ tos.title }}</v-card-title>
           <v-divider></v-divider>
-          <v-card-text class="notice">
-            <div v-html="tos.content"></div>
-          </v-card-text>
+          <v-card-text class="notice" v-html="tos.content"></v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="tosDialog = false">
+            <v-btn color="primary" text @click="tosDialog = false">
               Agree
             </v-btn>
           </v-card-actions>
@@ -208,17 +128,13 @@
           <v-card color="primary" dark>
             <v-card-text>
               Please stand by
-              <v-progress-linear
-                indeterminate
-                color="white"
-                class="mb-0"
-              ></v-progress-linear>
+              <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
             </v-card-text>
           </v-card>
         </v-dialog>
       </v-overlay>
 
-      <v-snackbar class="z-10" v-model="tipSnackbar">
+      <v-snackbar v-model="tipSnackbar" :timeout="3000" color="info" class="z-10">
         {{ tipSnackbarText }}
       </v-snackbar>
     </v-container>
@@ -230,6 +146,7 @@
 import { IconPark } from "@icon-park/vue/es/all";
 import { onLineLxc } from "@/api/lxc/lxc.js";
 import { listWebsiteNotice } from "@/api/system/notice";
+
 export default {
   components: {
     IconPark,
@@ -259,7 +176,6 @@ export default {
       },
       topImageItem: [
         "https://ftp.bmp.ovh/imgs/2021/01/8646e0485688935f.jpg",
-        // "https://s3.bmp.ovh/imgs/2021/12/963e0fac710a24e9.jpeg",
       ],
       tipSnackbar: false,
       tipSnackbarText: "",
@@ -292,8 +208,7 @@ export default {
         },
         {
           title: "赞助我们",
-          imageUrl:
-            "https://jihulab.com/darkland/lxc_files/-/raw/main/usdt.jpg?inline=false",
+          imageUrl: "https://jihulab.com/darkland/lxc_files/-/raw/main/usdt.jpg?inline=false",
           url: "/",
           ico: "OvalLoveTwo",
         },
@@ -305,52 +220,27 @@ export default {
       ],
     };
   },
-
-  mounted: function () {
-    //请求
-    onLineLxc()
-      .then((response) => {
-        this.lxcOnLineList = response.data.lxcOnLineList;
-        this.lxcLxcUsedList = response.data.lxcLxcUsedList;
-        this.loadChart();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    listWebsiteNotice(this.noticeParams)
-      .then((response) => {
-        // console.log('listWebsiteNotice',response.rows[0]);
-        if (response.rows[0] && response.rows[0].status == "0") {
-          this.notice = response.rows[0].noticeContent;
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  mounted() {
+    this.fetchLxcData();
+    this.fetchWebsiteNotice();
   },
   methods: {
-    /** 复制代码成功 */
     clipboardSuccess() {
       this.$modal.msgSuccess("复制成功");
     },
-    handleAnimation: function (anim) {
-      this.anim = anim;
-    },
     toHome() {
-      document.getElementById("home").scrollIntoView();
+      document.getElementById("home").scrollIntoView({ behavior: "smooth" });
     },
     jumpUrl(to) {
       if (to.imageUrl) {
         this.showSponsorDialog(to.imageUrl);
-        return;
-      }else if(to.url){
-        window.open(to.url, '_blank')
-      }else{
-        if(to.needLogin && !this.$store.getters.token){
-            this.$bus.$emit("showLoginDialog");
-            this.$modal.msgError("请先登录");
-            return;
+      } else if (to.url) {
+        window.open(to.url, '_blank');
+      } else {
+        if (to.needLogin && !this.$store.getters.token) {
+          this.$bus.$emit("showLoginDialog");
+          this.$modal.msgError("请先登录");
+          return;
         }
         this.$router.push(to.path);
       }
@@ -359,13 +249,11 @@ export default {
       this.$nextTick(() => {
         this.myChart = echarts.init(document.getElementById(this.charts_id));
         this.myChart.setOption(this.initOption());
-        echarts
-          .init(document.getElementById("bar_chart_used"))
-          .setOption(this.initOptionUsed());
+        echarts.init(document.getElementById("bar_chart_used")).setOption(this.initOptionUsed());
       });
     },
     initOption() {
-      const option = {
+      return {
         title: {
           text: "本站空闲主机地区分布",
           left: "center",
@@ -384,10 +272,9 @@ export default {
           {
             name: "地区",
             type: "pie",
-            minAngle:'10',
+            minAngle: 10,
             radius: ["40%", "70%"],
             avoidLabelOverlap: false,
-            // center: ["70%", "50%"],
             itemStyle: {
               borderRadius: 10,
               borderColor: "#fff",
@@ -411,13 +298,11 @@ export default {
           },
         ],
       };
-      return option;
     },
     initOptionUsed() {
-      const option = {
+      return {
         title: {
           text: "本站已领取的主机地区分布",
-          // subtext: "仅空闲主机",
           left: "center",
         },
         tooltip: {
@@ -434,10 +319,9 @@ export default {
           {
             name: "地区",
             type: "pie",
-            minAngle:'10',
+            minAngle: 10,
             radius: ["40%", "70%"],
             avoidLabelOverlap: false,
-            // center: ["70%", "50%"],
             itemStyle: {
               borderRadius: 10,
               borderColor: "#fff",
@@ -461,13 +345,11 @@ export default {
           },
         ],
       };
-      return option;
     },
     showTosDialog() {
       this.overlay = true;
       listWebsiteNotice({ noticeType: "tos" })
         .then((response) => {
-          // console.log('listWebsiteNotice',response.rows[0]);
           if (response.rows[0] && response.rows[0].status == "0") {
             this.tos.content = response.rows[0].noticeContent;
             this.tos.title = response.rows[0].noticeTitle;
@@ -475,46 +357,58 @@ export default {
           this.overlay = false;
           this.tosDialog = true;
         })
-        .catch(function (error) {
-          this.overlay = true;
-          console.log(error);
+        .catch((error) => {
+          this.overlay = false;
+          console.error(error);
         });
-    },
-    async routTo(to) {
-      this.menu = false;
-      this.$router.push({ path: `/${to}` || "/" }).catch(() => {});
     },
     showSponsorDialog(url) {
       this.sponsorDialog = true;
       this.sponsorImgUrl = url;
     },
     onCopy(copyData) {
-      let _this = this;
-      _this
-        .$copyText(copyData)
+      this.$copyText(copyData)
         .then(() => {
-          _this.tipSnackbarText = "已复制到剪贴板，若无法粘贴请双击复制";
-          _this.tipSnackbar = true;
+          this.tipSnackbarText = "已复制到剪贴板，若无法粘贴请双击复制";
+          this.tipSnackbar = true;
         })
         .catch(() => {
-          _this.tipSnackbarText = "复制失败，请手动复制";
-          _this.tipSnackbar = true;
+          this.tipSnackbarText = "复制失败，请手动复制";
+          this.tipSnackbar = true;
+        });
+    },
+    fetchLxcData() {
+      onLineLxc()
+        .then((response) => {
+          this.lxcOnLineList = response.data.lxcOnLineList;
+          this.lxcLxcUsedList = response.data.lxcLxcUsedList;
+          this.loadChart();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    fetchWebsiteNotice() {
+      listWebsiteNotice(this.noticeParams)
+        .then((response) => {
+          if (response.rows[0] && response.rows[0].status == "0") {
+            this.notice = response.rows[0].noticeContent;
+          }
+        })
+        .catch((error) => {
+          console.error(error);
         });
     },
   },
 };
 </script>
+
 <style lang="scss" scoped>
-#home{
-  .bg-img {
-    background-size: cover;
-  }
-  
+#home {
   .notice {
-    ::v-deep  p {
+    ::v-deep p {
       margin: 0 !important;
     }
-  } 
+  }
 }
-
 </style>
