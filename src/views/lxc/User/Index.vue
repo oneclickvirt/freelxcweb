@@ -1,313 +1,206 @@
 <template>
   <v-container data-app="true">
-    <div
-      class="grid xl:grid-cols-12 grid-cols-1 gap-10 mt-8 mb-12 max-h-screen"
-    >
-      <v-card class="xl:col-span-12 col-span-8 w-full max-h-screen" outlined>
-        <v-card-text>
-          <p class="text-h4 text--primary mt-2">👋你好：{{ userData.name }}</p>
-          <div class="grid xl:grid-cols-3 grid-cols-2 gap-2 mb-3">
-            <div>
-              <p>剩余配额</p>
-              <div class="text-xl text--primary font-black">
-                {{ userData.surplusQuota }}
-              </div>
-            </div>
-            <div>
-              <p>使用配额</p>
-              <div class="text-xl text--primary font-black">
-                {{ userData.usingQuota }}
-              </div>
-            </div>
-            <div>
-              <p>类型</p>
-              <div class="text-xl text--primary font-black"> {{ userData.roleName }}</div>
-            </div>
-          </div>
-          <v-alert class="mt-5" dense type="info" outlined>
-            请注意站长<strong>公告</strong>
-          </v-alert>
-          <v-alert
-            dismissible
-            color="#E6A23C"
-            border="left"
-            elevation="2"
-            colored-border
-          >
-            <p class="m-4" v-html="notice"></p>
-          </v-alert>
-          <!-- <v-card class="w-auto mb-5" outlined>
-            <p class="m-4" v-html="notice"></p>
-          </v-card> -->
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-row class="mt-8 mb-12">
+      <v-col cols="12" xl="12">
+        <v-card outlined>
+          <v-card-text>
+            <h2 class="text-h4 text--primary mb-4">👋 你好：{{ userData.name }}</h2>
 
-    <v-row justify="center">
-      <v-dialog
-        v-model="lxcDialog"
-        max-width="680"
-        max-height="800"
-        transition="dialog-top-transition"
-      >
-        <v-card class="relative">
-          <div class="m-5 text-xl text-center subpixel-antialiased font-bold">
-            <v-btn
-              style="float: inline-start"
-              class="bottom-4 right-4"
-              icon
-              @click="lxcDialog = false"
-            >
-              <v-icon>mdi-window-close</v-icon>
-            </v-btn>
-            选择申请的主机
-          </div>
+            <v-row class="mb-6">
+              <v-col cols="12" sm="4">
+                <v-card outlined>
+                  <v-card-text>
+                    <p class="text-subtitle-1">剩余配额</p>
+                    <p class="text-h5 font-weight-bold">{{ userData.surplusQuota }}</p>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-card outlined>
+                  <v-card-text>
+                    <p class="text-subtitle-1">使用配额</p>
+                    <p class="text-h5 font-weight-bold">{{ userData.usingQuota }}</p>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+              <v-col cols="12" sm="4">
+                <v-card outlined>
+                  <v-card-text>
+                    <p class="text-subtitle-1">类型</p>
+                    <p class="text-h5 font-weight-bold">{{ userData.roleName }}</p>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
 
-          <v-divider />
+            <v-alert class="mb-4" dense type="info" outlined>
+              请注意站长<strong>公告</strong>
+            </v-alert>
 
-          <div class="grid xl:grid-cols-2 grid-cols-1 gap-10 p-5">
-            <v-card
-              v-for="(lxc, i) in lxcItems"
-              v-show="!lxc.state"
-              :key="i"
-              v-ripple
-              class="cursor-pointer w-full"
-              outlined
-              @click="applicationLxc(lxc.id)"
-            >
-              <div class="flex">
-                <v-card-text class="align-middle pr-0" style="width: 85%">
-                  <v-icon
-                    class="fi mr-3 z-deep-1"
-                    :class="`fi-${lxc.tag}`"
-                    dark
-                    size="35"
-                    style="
-                      box-shadow: 0 -1px 1px -2px rgba(0, 0, 0, 0.2),
-                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                        0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
-                      height: 35px !important;
-                    "
-                  ></v-icon>
-                  {{ lxc.childName }}
-                </v-card-text>
-                <v-card-text class="pl-0 pr-1 fi align-self-center"
-                  >到期时间：{{ lxc.superDead }}
-                </v-card-text>
-              </div>
-            </v-card>
-          </div>
+            <v-alert dismissible color="#E6A23C" border="left" elevation="2" colored-border>
+              <p class="pa-4" v-html="notice"></p>
+            </v-alert>
+          </v-card-text>
         </v-card>
-      </v-dialog>
+      </v-col>
     </v-row>
 
-    <v-row justify="center">
-      <v-dialog
-        v-model="lxcDeleteDialog"
-        max-width="500"
-        transition="dialog-top-transition"
-      >
-        <v-card class="relative">
-          <v-btn
-            class="absolute top-0 right-0"
-            icon
-            @click="lxcDeleteDialog = false"
-          >
+    <v-dialog v-model="lxcDialog" max-width="680" max-height="800" transition="dialog-top-transition">
+      <v-card>
+        <v-card-title class="text-h5 text-center">
+          选择申请的主机
+          <v-btn icon @click="lxcDialog = false" class="position-absolute" style="right: 16px; top: 16px;">
             <v-icon>mdi-window-close</v-icon>
           </v-btn>
+        </v-card-title>
 
-          <div class="m-4 text-xl text-center subpixel-antialiased font-bold">
-            确定要删除吗？
-          </div>
+        <v-divider></v-divider>
 
-          <v-divider />
-
-          <div class="grid grid-cols-2 gap-10 p-5">
-            <div class="text-center">
-              <v-btn
-                rounded
-                color="primary"
-                dark
-                @click="lxcDeleteDialog = false"
-              >
-                取消删除</v-btn
-              >
-            </div>
-            <div class="text-center">
-              <v-btn rounded color="red" dark @click="lxcModify('delete')">
-                确定删除</v-btn
-              >
-            </div>
-          </div>
-        </v-card>
-      </v-dialog>
-    </v-row>
-
-    <v-row justify="center">
-      <v-dialog
-        v-model="lxcModifyDialog"
-        max-width="500"
-        transition="dialog-transition"
-      >
-        <v-card class="relative">
-          <div class="m-5 text-xl text-center subpixel-antialiased font-bold">
-            <v-btn
-              style="float: inline-start"
-              class="bottom-4 right-4"
-              icon
-              @click="lxcModifyDialog = false"
-            >
-              <v-icon>mdi-window-close</v-icon>
-            </v-btn>
-            主机操作
-          </div>
-
-          <v-divider />
-
-          <div class="text-center pl-5 pr-5">
-            <v-alert class="mt-5" dense type="info" outlined>
-              请不要<strong> 重复执行 </strong>命令，否则会宕机，点击一次即可。
-            </v-alert>
-          </div>
-
-          <div class="pl-5 pr-5">
-            <v-alert class="mt-5" dense type="success" outlined>
-              主机密码<strong
-                class="cursor-pointer"
-                @click="onCopy(lxcPassword)"
-              >
-                {{ lxcPassword }}
-              </strong>
-            </v-alert>
-          </div>
-
-          <div class="pl-5 pr-5 space-y-1">
-            <v-card class="w-full" outlined>
-              <v-card-text>
-                <div class="grid grid-cols-4 justify-items-center">
+        <v-card-text>
+          <v-row>
+            <v-col v-for="(lxc, i) in lxcItems" :key="i" cols="12" sm="6" v-show="!lxc.state">
+              <v-card outlined hover @click="applicationLxc(lxc.id)">
+                <v-card-text class="d-flex align-center">
+                  <v-icon class="mr-3" :class="`fi-${lxc.tag}`" dark size="35"></v-icon>
                   <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">IP</div>
-                    </div>
-                    <div class="cursor-pointer" @click="onCopy(lxcInfo.ip)">
-                      {{ lxcInfo.ip }}
-                    </div>
+                    <div>{{ lxc.childName }}</div>
+                    <div class="text-caption">到期时间：{{ lxc.superDead }}</div>
                   </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        SSH端口
-                      </div>
-                    </div>
-                    <div
-                      class="cursor-pointer"
-                      @click="onCopy(lxcInfo.sshPort)"
-                    >
-                      {{ lxcInfo.sshPort }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        开始端口
-                      </div>
-                    </div>
-                    <div class="cursor-pointer" @click="onCopy(lxcPortStart)">
-                      {{ lxcPortStart }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        结束端口
-                      </div>
-                    </div>
-                    <div class="cursor-pointer" @click="onCopy(lxcPortEnd)">
-                      {{ lxcPortEnd }}
-                    </div>
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-            <v-card
-              class="d-flex justify-space-around mb-6 align-center"
-              :color="$vuetify.theme.dark ? 'grey darken-3' : 'grey lighten-4'"
-              flat
-              tile
-            >
-              <div class="pa-2" outlined tile>流量使用情况</div>
-              <div class="pa-2" outlined>
-                <v-list-item-subtitle>
-                  上行流量：{{ netUsage[1] || "-" }}
-                </v-list-item-subtitle>
-              </div>
-              <div class="pa-2" outlined tile>
-                <v-list-item-subtitle>
-                  下行流量：{{ netUsage[0] || "-" }}
-                </v-list-item-subtitle>
-              </div>
-            </v-card>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
-            <div class="grid xl:grid-cols-3 grid-cols-3 gap-10 p-5">
-              <div class="text-center">
-                <v-btn rounded color="primary" dark @click="lxcModify('start')">
-                  主机开机
-                </v-btn>
-              </div>
-              <div class="text-center">
-                <v-btn rounded color="primary" dark @click="lxcModify('stop')">
-                  主机关机
-                </v-btn>
-              </div>
-              <div class="text-center">
-                <v-btn
-                  rounded
-                  color="primary"
-                  dark
-                  @click="lxcModify('restart')"
-                >
-                  主机重启</v-btn
-                >
-              </div>
-              <!-- <div class="text-center">
-                <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
-                  重置密码</v-btn
-                >
-              </div> -->
-              <!-- <div class="text-center">
-                <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
-                  删除主机</v-btn
-                >
-              </div> -->
-            </div>
-          </div>
-        </v-card>
-      </v-dialog>
-    </v-row>
+    <v-dialog v-model="lxcDeleteDialog" max-width="500" transition="dialog-top-transition">
+      <v-card>
+        <v-card-title class="text-h5 text-center">
+          确定要删除吗？
+          <v-btn icon @click="lxcDeleteDialog = false" class="position-absolute" style="right: 16px; top: 16px;">
+            <v-icon>mdi-window-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="lxcDeleteDialog = false">
+            取消删除
+          </v-btn>
+          <v-btn color="red" text @click="lxcModify('delete')">
+            确定删除
+          </v-btn>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="lxcModifyDialog" max-width="500" transition="dialog-transition">
+      <v-card>
+        <v-card-title class="text-h5 text-center">
+          主机操作
+          <v-btn icon @click="lxcModifyDialog = false" class="position-absolute" style="right: 16px; top: 16px;">
+            <v-icon>mdi-window-close</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-divider></v-divider>
+
+        <v-card-text>
+          <v-alert dense type="info" outlined class="mb-4">
+            请不要<strong> 重复执行 </strong>命令，否则会宕机，点击一次即可。
+          </v-alert>
+
+          <v-alert dense type="success" outlined class="mb-4">
+            主机密码：
+            <strong class="cursor-pointer" @click="onCopy(lxcPassword)">
+              {{ lxcPassword }}
+            </strong>
+          </v-alert>
+
+          <v-card outlined class="mb-4">
+            <v-card-text>
+              <v-row>
+                <v-col cols="3" class="text-center">
+                  <div class="text-caption">IP</div>
+                  <div class="cursor-pointer" @click="onCopy(lxcInfo.ip)">
+                    {{ lxcInfo.ip }}
+                  </div>
+                </v-col>
+                <v-col cols="3" class="text-center">
+                  <div class="text-caption">SSH端口</div>
+                  <div class="cursor-pointer" @click="onCopy(lxcInfo.sshPort)">
+                    {{ lxcInfo.sshPort }}
+                  </div>
+                </v-col>
+                <v-col cols="3" class="text-center">
+                  <div class="text-caption">开始端口</div>
+                  <div class="cursor-pointer" @click="onCopy(lxcPortStart)">
+                    {{ lxcPortStart }}
+                  </div>
+                </v-col>
+                <v-col cols="3" class="text-center">
+                  <div class="text-caption">结束端口</div>
+                  <div class="cursor-pointer" @click="onCopy(lxcPortEnd)">
+                    {{ lxcPortEnd }}
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card-text>
+          </v-card>
+
+          <v-card flat :color="$vuetify.theme.dark ? 'grey darken-3' : 'grey lighten-4'" class="mb-4">
+            <v-card-text class="d-flex justify-space-between">
+              <div>流量使用情况</div>
+              <div>上行流量：{{ netUsage[1] || "-" }}</div>
+              <div>下行流量：{{ netUsage[0] || "-" }}</div>
+            </v-card-text>
+          </v-card>
+
+          <v-row>
+            <v-col cols="4" class="text-center">
+              <v-btn color="primary" @click="lxcModify('start')">
+                主机开机
+              </v-btn>
+            </v-col>
+            <v-col cols="4" class="text-center">
+              <v-btn color="primary" @click="lxcModify('stop')">
+                主机关机
+              </v-btn>
+            </v-col>
+            <v-col cols="4" class="text-center">
+              <v-btn color="primary" @click="lxcModify('restart')">
+                主机重启
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <v-overlay :value="firstOverlay">
       <v-progress-circular indeterminate size="64" />
     </v-overlay>
+
     <v-overlay :value="overlay">
       <v-dialog v-model="overlay" hide-overlay persistent width="300">
         <v-card color="primary" dark>
           <v-card-text>
-            Please stand by
-            <v-progress-linear
-              indeterminate
-              color="white"
-              class="mb-0"
-            ></v-progress-linear>
+            请稍候
+            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
           </v-card-text>
         </v-card>
       </v-dialog>
     </v-overlay>
-    <v-snackbar v-model="tipSnackbar" class="z-10">
-      {{ tipSnackbarText }}
 
-      <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="tipSnackbar = false">
-          确定
+    <v-snackbar v-model="tipSnackbar" :timeout="3000" top>
+      {{ tipSnackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="tipSnackbar = false">
+          关闭
         </v-btn>
       </template>
     </v-snackbar>
@@ -316,7 +209,6 @@
 
 <script>
 import axios from "axios";
-// import vuetify from "@/plugins/vuetify";
 import {
   getLxcList,
   addone,
@@ -328,12 +220,11 @@ import {
 import { mapGetters, mapState } from "vuex";
 import { loginLxc, userNav } from "@/api/login";
 import { listWebsiteNotice } from "@/api/system/notice";
+
 export default {
   name: "lxcUser",
-  // extends: vuetify,
   computed: {
     ...mapGetters(["name", "token"]),
-    // ...mapState(["userinfo"]),
   },
   data: () => ({
     lxcDeleteDialog: false,
@@ -362,13 +253,9 @@ export default {
     lxcItems: [],
     userData: {},
   }),
-  mounted() {},
-  //创建前设置
-  beforeCreate() {},
-  created: function () {
+  created() {
     listWebsiteNotice(this.noticeParams)
       .then((response) => {
-        // console.log('listWebsiteNotice', response.rows[0]);
         if (response.rows[0] && response.rows[0].status == "0") {
           this.notice = response.rows[0].noticeContent;
         }
@@ -379,16 +266,8 @@ export default {
     if (this.token) {
       this.userLxcList(true);
     }
-    // this.$bus.$emit("global:homeTipSnackbar",  response.data)
-    // this.$bus.$on('global:userData', (json) => {
-    //   this.surplusQuota = json.surplusQuota
-    //   this.usingQuota = json.usingQuota
-    //   this.username = json.name
-    //   this.userData = json
-    // })
   },
   methods: {
-    /** 复制代码成功 */
     clipboardSuccess() {
       this.$modal.msgSuccess("复制成功");
     },
@@ -494,7 +373,6 @@ export default {
         .then((response) => {
           this.overlay = false;
           this.tipSnackbarText = response.msg;
-          // this.tipSnackbar = true;
           this.$modal.msgSuccess(this.tipSnackbarText);
           this.lxcInfo = response.data;
           this.lxcPortStart = response.data.portStart;
@@ -533,18 +411,23 @@ export default {
         });
     },
   },
-  beforeDestroy() {
-    // @ts-ignore
-    // document && document.querySelector("body").removeAttribute("style");
-    // document.querySelector("body").style.backgroundColor = "";
-    // this.$vuetify.theme.dark = false;
-  },
 };
 </script>
-<style lang="less" scoped>
-.StatusLine_StatusLine__dashboard__lhiwZ {
+
+<style lang="scss" scoped>
+.status-indicator {
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 20px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.position-absolute {
+  position: absolute;
 }
 </style>

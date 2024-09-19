@@ -1,467 +1,240 @@
 <template>
   <v-container data-app="true">
-    <div v-if="!myLxcItem || myLxcItem.length == 0" class="start-msg text font-sans text-opacity-50 text-6xl tracking-widest my-align-center">
-      空空如也
+    <div v-if="!myLxcItem || myLxcItem.length == 0" class="text-center my-16">
+      <v-icon size="64" color="grey lighten-1">mdi-server-off</v-icon>
+      <div class="text-h4 grey--text text--lighten-1 mt-4">空空如也</div>
     </div>
-    <div v-if="myLxcItem">
-      <div>
-        <!-- <h3 class="text-h4 font-weight-light mb-2">点击查看详情</h3> -->
-        <div class="grid xl:grid-cols-3 md:grid-cols-2 lg:grid-cols-2 grid-cols-1 gap-6 ">
-          <v-hover v-for="(myLxc, i) in myLxcItem.filter(
-            (item) => item.lxcStatus !== '7'
-          )" :key="i" v-slot="{ hover }">
-            <v-card :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" :elevation="hover ? 24 : 1" :loading="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" close-delay="200" v-ripple
-              class="w-full cursor-pointer" outlined @click="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 ? '' : lxcModifyTrue(myLxc.lxcId)">
-              <v-fade-transition v-if="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2">
-                <v-overlay absolute light color="#656565" style="background-color: #12121287 !important" class="cursor-not-allowed">
-                  <v-scroll-y-transition>
-                    <div class="text-h4 flex-grow-1 text-center">
-                      创建中
-                      <!-- <v-progress-circular
-                        indeterminate
-                        size="30"
-                      ></v-progress-circular> -->
-                    </div>
-                  </v-scroll-y-transition>
-                </v-overlay>
-              </v-fade-transition>
-              <v-card-text>
-                <div class="flex flex-row items-center space-x-4">
-                  <v-avatar tile class="text-white" size="53" style="
-                        box-shadow: 0 -1px 1px -2px rgba(0, 0, 0, 0.2),
-                          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                          0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
-                        height: 40px !important;
-                      ">
-                    <!-- {{
-                        myLxc.superName.slice(0, 2)
-                    }}
-                    <i class="fi fi-cn w-3 h-3"></i> -->
-                    <v-icon :class="`fi fi-${myLxc.superTag}`" dark></v-icon>
-                  </v-avatar>
-                  <!-- <i class="fi fi-cn w-3 h-3"></i> -->
-                  <!-- <div id="" class="animate-ping StatusLine_StatusLine__dashboard__lhiwZ" style="background-color: rgb(0, 168, 129);"></div> -->
-                  <!-- <div id="" class="animate-ping StatusLine_StatusLine__dashboard__lhiwZ" style="background-color: rgb(0, 168, 129);"></div> -->
 
-                  <!-- <span class="animate-ping absolute inline-flex h-full w-full rounded-full  opacity-75" style="background-color: rgb(0, 168, 129);"></span> -->
-                  <div class="flex-grow-1 ml-5">
-                    <div class="flex items-stretch text-xl text--primary font-black">
-                      <div>
-                        {{ myLxc.childName }}
-                      </div>
-                      <div class="flex self-center text-xl h-4 w-4 pl-2" v-if="myLxc.ping != null">
-                        <span v-if="myLxc.ping" class="animate-ping absolute inline-flex rounded-full h-3 w-3" :style="{
-                          backgroundColor: myLxc.ping
-                            ? 'rgb(0, 168, 129)'
-                            : 'red',
-                        }"></span>
-                        <span class="relative inline-flex rounded-full h-3 w-3 " :style="{
-                          backgroundColor: myLxc.ping
-                            ? 'rgb(0, 168, 129)'
-                            : 'red',
-                        }"></span>
-                      </div>
-                    </div>
-                    <div class="text-current">ID：{{ myLxc.lxcId }}</div>
-                  </div>
-                  <v-menu class="items-start flex-grow-0 m-0" offset-y transition="scroll-y-transition">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn class="mb-3" v-bind="attrs" v-on="on" color="white" icon>
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item v-for="(item, index) in moreMenu" :key="index">
-                        <v-btn text @click="handleLxcMenuClick(myLxc, item.method)">
-                          {{ item.title }}
-                        </v-btn>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-                <div class="grid grid-cols-3 mt-5">
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        配额时长
-                      </div>
-                    </div>
+    <template v-else>
+      <v-row>
+        <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7')" :key="i">
+          <v-hover v-slot="{ hover }">
+            <v-card :elevation="hover ? 8 : 2" :class="{ 'on-hover': hover }"
+              :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2"
+              @click="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 ? '' : lxcModifyTrue(myLxc.lxcId)">
+              <v-card-text>
+                <v-row no-gutters align="center">
+                  <v-col cols="auto" class="mr-3">
+                    <v-avatar tile color="primary" size="48">
+                      <v-icon dark :class="`fi fi-${myLxc.superTag}`"></v-icon>
+                    </v-avatar>
+                  </v-col>
+                  <v-col>
+                    <div class="text-h6">{{ myLxc.childName }}</div>
+                    <div class="text-subtitle-2">ID：{{ myLxc.lxcId }}</div>
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-btn icon @click.stop="$refs[`menu-${i}`].open()">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                    <v-menu ref="menu-${i}" :close-on-content-click="false" :nudge-width="200" offset-x>
+                      <v-list>
+                        <v-list-item v-for="(item, index) in moreMenu" :key="index"
+                          @click="handleLxcMenuClick(myLxc, item.method)">
+                          <v-list-item-title>{{ item.title }}</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </v-col>
+                </v-row>
+                <v-divider class="my-3"></v-divider>
+                <v-row no-gutters>
+                  <v-col cols="4">
+                    <div class="text-overline">配额时长</div>
                     <div>{{ myLxc.endTime }}</div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        SSH端口
-                      </div>
-                    </div>
-                    <div v-clipboard:copy="myLxc.sshPort" v-clipboard:success="clipboardSuccess">
-                      {{ myLxc.sshPort }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">IP地址</div>
-                    </div>
-                    <div v-clipboard:copy="myLxc.ip" v-clipboard:success="clipboardSuccess">{{ myLxc.ip }}</div>
-                  </div>
-                </div>
+                  </v-col>
+                  <v-col cols="4">
+                    <div class="text-overline">SSH端口</div>
+                    <div class="cursor-pointer" @click.stop="onCopy(myLxc.sshPort)">{{ myLxc.sshPort }}</div>
+                  </v-col>
+                  <v-col cols="4">
+                    <div class="text-overline">IP地址</div>
+                    <div class="cursor-pointer" @click.stop="onCopy(myLxc.ip)">{{ myLxc.ip }}</div>
+                  </v-col>
+                </v-row>
               </v-card-text>
+              <v-overlay :value="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" absolute>
+                <v-progress-circular indeterminate size="64"></v-progress-circular>
+                <div class="text-h5 mt-4">创建中</div>
+              </v-overlay>
             </v-card>
           </v-hover>
-        </div>
-        <v-row class="pb-10 pt-13" v-if="myLxcItem.filter((item) => item.lxcStatus === '7').length > 0">
-          <v-col>
-            <div class="start-msg text text-h4 text-opacity-50">
-              以下小鸡已过期，待回收
-            </div>
+        </v-col>
+      </v-row>
+
+      <v-divider class="my-6"></v-divider>
+
+      <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0">
+        <div class="text-h5 mb-4 grey--text">已过期，待回收</div>
+        <v-row>
+          <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '7')"
+            :key="i">
+            <v-card outlined>
+              <v-card-text>
+                <v-row no-gutters align="center">
+                  <v-col cols="auto" class="mr-3">
+                    <v-avatar tile color="grey" size="48">
+                      <v-icon dark :class="`fi fi-${myLxc.superTag}`"></v-icon>
+                    </v-avatar>
+                  </v-col>
+                  <v-col>
+                    <div class="text-h6 grey--text">{{ myLxc.childName }}</div>
+                    <div class="text-subtitle-2 grey--text">ID：{{ myLxc.lxcId }}</div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
-        <div class="grid xl:grid-cols-3 grid-cols-1 gap-6">
-          <v-hover v-for="(myLxc, i) in myLxcItem.filter(
-            (item) => item.lxcStatus === '7'
-          )" :key="i" v-slot="{ hover }">
-            <v-card :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" :elevation="hover ? 24 : 1" :loading="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" close-delay="200" v-ripple
-              class="w-full cursor-pointer" outlined>
-              <v-fade-transition v-if="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2">
-                <v-overlay absolute light color="#656565" style="background-color: #12121287 !important" class="cursor-not-allowed">
-                  <v-scroll-y-transition>
-                    <div class="text-h4 flex-grow-1 text-center">
-                      创建中
-                      <!-- <v-progress-circular
-                        indeterminate
-                        size="30"
-                      ></v-progress-circular> -->
-                    </div>
-                  </v-scroll-y-transition>
-                </v-overlay>
-              </v-fade-transition>
-              <v-card-text>
-                <div class="flex space-x-4">
-                  <v-avatar tile class="text-white" size="53" style="
-                        box-shadow: 0 -1px 1px -2px rgba(0, 0, 0, 0.2),
-                          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                          0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
-                        height: 40px !important;
-                      ">
-                    <!-- {{
-                        myLxc.superName.slice(0, 2)
-                    }}
-                    <i class="fi fi-cn w-3 h-3"></i> -->
-                    <v-icon :class="`fi fi-${myLxc.superTag}`" dark></v-icon>
-                  </v-avatar>
-                  <!-- <i class="fi fi-cn w-3 h-3"></i> -->
-                  <!-- <div id="" class="animate-ping StatusLine_StatusLine__dashboard__lhiwZ" style="background-color: rgb(0, 168, 129);"></div> -->
-                  <!-- <div id="" class="animate-ping StatusLine_StatusLine__dashboard__lhiwZ" style="background-color: rgb(0, 168, 129);"></div> -->
-
-                  <!-- <span class="animate-ping absolute inline-flex h-full w-full rounded-full  opacity-75" style="background-color: rgb(0, 168, 129);"></span> -->
-                  <span class="h-3 w-1 float-right" v-if="myLxc.ping != null">
-                    <span v-if="myLxc.ping" class="animate-ping absolute inline-flex rounded-full h-3 w-3 mt-2" :style="{
-                      backgroundColor: myLxc.ping
-                        ? 'rgb(0, 168, 129)'
-                        : 'red',
-                    }"></span>
-                    <span class="relative inline-flex rounded-full h-3 w-3 mt-2" :style="{
-                      backgroundColor: myLxc.ping
-                        ? 'rgb(0, 168, 129)'
-                        : 'red',
-                    }"></span>
-                  </span>
-                  <div class="flex-grow ml-5">
-                    <div class="text-xl text--primary font-black">
-                      {{ myLxc.childName }}
-                    </div>
-                    <p class="text-current">ID：{{ myLxc.lxcId }}</p>
-                  </div>
-                  <v-menu class="flex-grow-0 m-0" offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-bind="attrs" v-on="on" color="white" icon>
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item v-for="(item, index) in moreMenu" :key="index">
-                        <v-btn text @click="handleLxcMenuClick(myLxc, item.method)">
-                          {{ item.title }}
-                        </v-btn>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-                <div class="grid grid-cols-3 mt-5">
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        配额时长
-                      </div>
-                    </div>
-                    <div>{{ myLxc.endTime }}</div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        SSH端口
-                      </div>
-                    </div>
-                    <div v-clipboard:copy="myLxc.sshPort" v-clipboard:success="clipboardSuccess">
-                      {{ myLxc.sshPort }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">IP地址</div>
-                    </div>
-                    <div v-clipboard:copy="myLxc.ip" v-clipboard:success="clipboardSuccess">{{ myLxc.ip }}</div>
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-          </v-hover>
-        </div>
       </div>
-    </div>
+    </template>
 
-    <v-row justify="center">
-      <v-dialog v-model="lxcDialog" max-width="680" max-height="800" transition="dialog-top-transition">
-        <v-card class="relative">
-          <div class="m-5 text-xl text-center subpixel-antialiased font-bold">
-            <v-btn style="float: inline-start" class="bottom-4 right-4" icon @click="lxcDialog = false">
-              <v-icon>mdi-window-close</v-icon>
-            </v-btn>
-            选择申请的主机
-          </div>
-
-          <v-divider />
-
-          <div class="grid xl:grid-cols-2 grid-cols-1 gap-10 p-5">
-            <v-card v-for="(lxc, i) in lxcItems" v-show="!lxc.state" :key="i" v-ripple class="cursor-pointer w-full" outlined @click="applicationLxc(lxc.id)">
-              <div class="flex">
-                <v-card-text class="align-middle pr-0" style="width: 85%">
-                  <v-icon class="fi mr-3 z-deep-1" :class="`fi-${lxc.tag}`" dark size="35" style="
-                        box-shadow: 0 -1px 1px -2px rgba(0, 0, 0, 0.2),
-                          0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                          0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
-                        height: 35px !important;
-                      "></v-icon>
-                  {{ lxc.childName }}
-                </v-card-text>
-                <v-card-text class="pl-0 pr-1 fi align-self-center">到期时间：{{ lxc.superDead }}
-                </v-card-text>
-              </div>
-            </v-card>
-          </div>
-        </v-card>
-      </v-dialog>
-    </v-row>
-
-    <v-row justify="center">
-      <v-dialog v-model="lxcDeleteDialog" max-width="500" transition="dialog-top-transition">
-        <v-card class="relative">
-          <v-btn class="absolute top-0 right-0" icon @click="lxcDeleteDialog = false">
-            <v-icon>mdi-window-close</v-icon>
+    <v-dialog v-model="lxcDialog" max-width="680" scrollable>
+      <v-card>
+        <v-card-title class="text-h5">
+          选择申请的主机
+          <v-spacer></v-spacer>
+          <v-btn icon @click="lxcDialog = false">
+            <v-icon>mdi-close</v-icon>
           </v-btn>
+        </v-card-title>
+        <v-divider></v-divider>
+        <v-card-text style="height: 400px;">
+          <v-row>
+            <v-col cols="12" sm="6" v-for="(lxc, i) in lxcItems" :key="i" v-show="!lxc.state">
+              <v-card outlined hover @click="applicationLxc(lxc.id)">
+                <v-card-text>
+                  <v-row no-gutters align="center">
+                    <v-col cols="auto" class="mr-3">
+                      <v-avatar tile color="primary" size="40">
+                        <v-icon dark :class="`fi fi-${lxc.tag}`"></v-icon>
+                      </v-avatar>
+                    </v-col>
+                    <v-col>
+                      <div class="text-subtitle-1">{{ lxc.childName }}</div>
+                      <div class="text-caption">到期时间：{{ lxc.superDead }}</div>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
-          <div class="m-4 text-xl text-center subpixel-antialiased font-bold">
-            确定要删除吗？
-          </div>
+    <v-dialog v-model="lxcDeleteDialog" max-width="400">
+      <v-card>
+        <v-card-title class="text-h5">确定要删除吗？</v-card-title>
+        <v-card-text>此操作将永久删除该主机，是否继续？</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="grey darken-1" text @click="lxcDeleteDialog = false">取消</v-btn>
+          <v-btn color="red darken-1" text @click="lxcModify('delete')">确定删除</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-          <v-divider />
-
-          <div class="grid grid-cols-2 gap-10 p-5">
-            <div class="text-center">
-              <v-btn rounded color="primary" dark @click="lxcDeleteDialog = false">
-                取消删除</v-btn>
-            </div>
-            <div class="text-center">
-              <v-btn rounded color="red" dark @click="lxcModify('delete')">
-                确定删除</v-btn>
-            </div>
-          </div>
-        </v-card>
-      </v-dialog>
-    </v-row>
-
-    <v-row justify="center">
-      <v-dialog v-model="lxcModifyDialog" max-width="500" overlay-opacity="0.95" overlay-color="#1C1C1C" transition="dialog-transition">
-        <!-- fullscreen -->
-        <v-card class="relative">
-          <div class="m-5 text-xl text-center subpixel-antialiased font-bold">
-            <v-btn absolute style="float: inline-start" class="left-3 top-3" icon @click="lxcModifyDialog = false">
-              <v-icon>mdi-window-close</v-icon>
-            </v-btn>
-            主机操作
-          </div>
-
-          <v-divider />
-
-          <div class="text-center pl-5 pr-5">
-            <v-alert class="mt-5" dense type="info" outlined>
-              请不要<strong> 重复执行 </strong>命令，否则会宕机，点击一次即可。
+    <v-dialog v-model="lxcModifyDialog" fullscreen hide-overlay transition="dialog-bottom-transition">
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click="lxcModifyDialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>主机操作</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-container>
+            <v-alert type="info" outlined>
+              请不要<strong>重复执行</strong>命令，否则会宕机，点击一次即可。
             </v-alert>
-          </div>
 
-          <div class="pl-5 pr-5">
-            <v-alert class="mt-5" dense type="success" outlined>
-              主机密码<strong class="cursor-pointer" v-clipboard:copy="lxcPassword" v-clipboard:success="clipboardSuccess">
-                {{ lxcPassword }}
-              </strong>
+            <v-alert type="success" outlined class="mt-4">
+              主机密码：
+              <span class="font-weight-bold cursor-pointer" @click="onCopy(lxcPassword)">{{ lxcPassword }}</span>
             </v-alert>
-          </div>
 
-          <div class="pl-5 pr-5 space-y-1">
-            <v-card class="w-full" outlined>
+            <v-card outlined class="mt-4">
               <v-card-text>
-                <div class="grid grid-cols-4 justify-items-center">
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">IP</div>
-                    </div>
-                    <div class="cursor-pointer" v-clipboard:copy="lxcInfo.ip" v-clipboard:success="clipboardSuccess">
-                      {{ lxcInfo.ip }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        SSH端口
-                      </div>
-                    </div>
-                    <div class="cursor-pointer" v-clipboard:copy="lxcInfo.sshPort" v-clipboard:success="clipboardSuccess">
-                      {{ lxcInfo.sshPort }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        开始端口
-                      </div>
-                    </div>
-                    <div class="cursor-pointer" v-clipboard:copy="lxcPortStart" v-clipboard:success="clipboardSuccess">
-                      {{ lxcPortStart }}
-                    </div>
-                  </div>
-                  <div>
-                    <div>
-                      <div class="text-sm text--primary font-black">
-                        结束端口
-                      </div>
-                    </div>
-                    <div class="cursor-pointer" v-clipboard:copy="lxcPortEnd" v-clipboard:success="clipboardSuccess">
-                      {{ lxcPortEnd }}
-                    </div>
-                  </div>
-                </div>
-              </v-card-text>
-            </v-card>
-            <v-card class="w-full" outlined v-if="lxcInfo.ipv6Addr">
-              <v-card-text>
-                <div class="grid grid-cols-1 justify-items-left">
-                  <div class="text-sm text--primary font-black pl-3" v-clipboard:copy="lxcInfo.ipv6Addr" v-clipboard:success="clipboardSuccess">IPV6地址： {{ lxcInfo.ipv6Addr }}</div>
-                </div>
+                <v-row>
+                  <v-col cols="12" sm="3">
+                    <div class="text-overline">IP</div>
+                    <div class="cursor-pointer" @click="onCopy(lxcInfo.ip)">{{ lxcInfo.ip }}</div>
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <div class="text-overline">SSH端口</div>
+                    <div class="cursor-pointer" @click="onCopy(lxcInfo.sshPort)">{{ lxcInfo.sshPort }}</div>
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <div class="text-overline">开始端口</div>
+                    <div class="cursor-pointer" @click="onCopy(lxcPortStart)">{{ lxcPortStart }}</div>
+                  </v-col>
+                  <v-col cols="12" sm="3">
+                    <div class="text-overline">结束端口</div>
+                    <div class="cursor-pointer" @click="onCopy(lxcPortEnd)">{{ lxcPortEnd }}</div>
+                  </v-col>
+                </v-row>
               </v-card-text>
             </v-card>
 
+            <v-card outlined class="mt-4" v-if="lxcInfo.ipv6Addr">
+              <v-card-text>
+                <div class="text-overline">IPV6地址</div>
+                <div class="cursor-pointer" @click="onCopy(lxcInfo.ipv6Addr)">{{ lxcInfo.ipv6Addr }}</div>
+              </v-card-text>
+            </v-card>
 
-            <v-card class="w-full mt-4">
-              <!-- <v-card class="d-flex justify-space-around mb-6 align-center" :color="$vuetify.theme.dark ? 'grey darken-3' : 'grey lighten-4'" flat tile>
-                <div class="pa-2" outlined tile>流量使用情况</div>
-                <div class="pa-2" outlined>
-                  <v-list-item-subtitle>
-                    上行流量：{{ (netUsage && netUsage[1]) || "-" }}
-                  </v-list-item-subtitle>
-                </div>
-                <div class="pa-2" outlined tile>
-                  <v-list-item-subtitle>
-                    下行流量：{{ (netUsage && netUsage[0]) || "-" }}
-                  </v-list-item-subtitle>
-                </div>
-              </v-card> -->
-              <v-img
-                :src="netImageSrc"
-                :lazy-src="netImageSrc"
-                class="min-h-300"
-                contain
-              >
+            <v-card class="mt-4">
+              <v-img :src="netImageSrc" :lazy-src="netImageSrc" aspect-ratio="2" class="grey lighten-2">
                 <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    ></v-progress-circular>
+                  <v-row class="fill-height ma-0" align="center" justify="center">
+                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                   </v-row>
                 </template>
               </v-img>
             </v-card>
 
-
-            <div class="grid xl:grid-cols-3 grid-cols-3 gap-10 p-5">
-              <div class="text-center">
-                <v-btn rounded color="primary" dark @click="lxcModify('start')">
-                  开 机
-                </v-btn>
-              </div>
-              <div class="text-center">
-                <v-btn rounded color="warning" dark @click="lxcModify('restart')">
-                  重 启</v-btn>
-              </div>
-              <div class="text-center">
-                <v-btn rounded color="red" dark @click="lxcModify('stop')">
-                  关 机
-                </v-btn>
-              </div>
-              <!-- 重建btn -->
-              <!-- 应该要新写一个函数  -->
-              <div class="text-center">
-                <v-btn rounded color="warning" dark @click="lxcModify('reset')">
-                  重 建
-                </v-btn>
-              </div>
-
-              <!-- <div class="text-center">
-                  <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
-                    重置密码</v-btn
-                  >
-                </div> -->
-              <div class="text-center">
-                <v-btn rounded color="red" @click="lxcDeleteDialog = true" dark>
-                  删除主机</v-btn
-                >
-              </div>
-            </div>
-          </div>
-        </v-card>
-      </v-dialog>
-    </v-row>
+            <v-row class="mt-4">
+              <v-col cols="4">
+                <v-btn block color="primary" @click="lxcModify('start')">开机</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn block color="warning" @click="lxcModify('restart')">重启</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn block color="error" @click="lxcModify('stop')">关机</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn block color="warning" @click="lxcModify('reset')">重建</v-btn>
+              </v-col>
+              <v-col cols="4">
+                <v-btn block color="error" @click="lxcDeleteDialog = true">删除主机</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <v-overlay :value="firstOverlay">
       <v-progress-circular indeterminate size="64" />
     </v-overlay>
-    <v-overlay :value="overlay">
-      <v-dialog v-model="overlay" hide-overlay persistent width="300">
-        <v-card color="primary" dark>
-          <v-card-text>
-            Please stand by
-            <v-progress-linear indeterminate color="white" class="mb-0"></v-progress-linear>
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-    </v-overlay>
-    <v-snackbar v-model="tipSnackbar" class="z-10">
-      {{ tipSnackbarText }}
 
-      <template #action="{ attrs }">
-        <v-btn color="pink" text v-bind="attrs" @click="tipSnackbar = false">
-          确定
-        </v-btn>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64" color="primary"></v-progress-circular>
+    </v-overlay>
+
+    <v-snackbar v-model="tipSnackbar" :timeout="3000" top color="info">
+      {{ tipSnackbarText }}
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="tipSnackbar = false">关闭</v-btn>
       </template>
     </v-snackbar>
   </v-container>
 </template>
 
 <script>
+// 保持原有的 JavaScript 代码不变
 import {
   addone,
   listAllQueue,
@@ -476,11 +249,11 @@ import {
 import { mapGetters, mapState } from "vuex";
 import { loginLxc, userNav } from "@/api/login";
 import { listWebsiteNotice } from "@/api/system/notice";
+
 export default {
   name: "myLxc",
   computed: {
     ...mapGetters(["name", "token"]),
-    // ...mapState(["userinfo"]),
   },
   data: () => ({
     childName: "",
@@ -514,30 +287,18 @@ export default {
     ],
     netImageSrc: "",
   }),
-  mounted() { },
-  //创建前设置
-  beforeCreate() { },
-  created: function () {
+  created() {
     this.$vuetify.theme.dark = true;
     if (this.token) {
       this.userLxcList(true);
     }
   },
   methods: {
-    // resetLxcQueue(childName) {
-    //   resetLxcQueue(childName).then(res => {
-    //     this.$message.success(res.msg);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
-    // },
     getNetImage(lxcId, type) {
       getNetImage(lxcId, type).then(res => {
         this.netImageSrc = URL.createObjectURL(new Blob([res]));
       })
     },
-    /** 复制代码成功 */
     clipboardSuccess() {
       this.$modal.msgSuccess("复制成功");
     },
@@ -608,12 +369,11 @@ export default {
       this.lxcDialog = false;
       this.overlay = true;
       let _this = this;
-      this.getNetImage(lxcId,'summary')
+      this.getNetImage(lxcId, 'summary')
       userLxcData(data)
         .then((response) => {
           this.overlay = false;
           this.tipSnackbarText = response.msg;
-          // this.tipSnackbar = true;
           this.$modal.msgSuccess(this.tipSnackbarText);
           this.lxcInfo = response.data;
           this.lxcPortStart = response.data.portStart;
@@ -639,32 +399,31 @@ export default {
       if (this.lxcDeleteDialog) this.lxcDeleteDialog = false;
       this.overlay = true;
       let _this = this;
-      if(data.modifyType=='reset') {
+      if (data.modifyType == 'reset') {
         resetLxcQueue(data.childName)
-        .then((response) => {
-          this.overlay = false;
-          this.tipSnackbarText = response.msg;
-          this.tipSnackbar = true;
-          this.userLxcList();
-        })
-        .catch(function (error) {
-          _this.overlay = false;
-          console.log(error);
-        });
-      } else{
+          .then((response) => {
+            this.overlay = false;
+            this.tipSnackbarText = response.msg;
+            this.tipSnackbar = true;
+            this.userLxcList();
+          })
+          .catch(function (error) {
+            _this.overlay = false;
+            console.log(error);
+          });
+      } else {
         modifyLxc(data)
-        .then((response) => {
-          this.overlay = false;
-          this.tipSnackbarText = response.msg;
-          this.tipSnackbar = true;
-          this.userLxcList();
-        })
-        .catch(function (error) {
-          _this.overlay = false;
-          console.log(error);
-        });
+          .then((response) => {
+            this.overlay = false;
+            this.tipSnackbarText = response.msg;
+            this.tipSnackbar = true;
+            this.userLxcList();
+          })
+          .catch(function (error) {
+            _this.overlay = false;
+            console.log(error);
+          });
       }
-      
     },
     handleLxcMenuClick(myLxc, method) {
       switch (method) {
@@ -686,17 +445,30 @@ export default {
           break;
       }
     },
+    onCopy(text) {
+      this.$copyText(text).then(() => {
+        this.$modal.msgSuccess("复制成功");
+      }, () => {
+        this.$modal.msgError("复制失败");
+      })
+    }
   },
   beforeDestroy() {
-    // document.querySelector("body").style.backgroundColor = "";
-    // this.$vuetify.theme.dark = false;
+    // 保持原有的代码
   },
 };
 </script>
-<style lang="less" scoped>
-.StatusLine_StatusLine__dashboard__lhiwZ {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 20px;
+
+<style lang="scss" scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.v-card.on-hover {
+  transition: all 0.3s ease-in-out;
+}
+
+.v-card.on-hover:hover {
+  transform: translateY(-5px);
 }
 </style>

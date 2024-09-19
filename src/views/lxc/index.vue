@@ -307,17 +307,6 @@
         <div class="ml-10 mr-10">
           <div class="flex flex-row-reverse space-x-4 space-x-reverse">
             <v-menu offset-y>
-              <!-- <template v-slot:activator="{ on, attrs }">
-                <v-btn color="white" v-bind="attrs" v-on="on" depressed>
-                  更多选项
-                  <v-icon right dark> mdi-menu-down </v-icon>
-                </v-btn>
-              </template>
-              <v-list>
-                <v-list-item @click="jumpDialog(item.type)" v-for="(item, index) in regTypeItems" :key="index">
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item>
-              </v-list> -->
             </v-menu>
           </div>
         </div>
