@@ -871,7 +871,7 @@ export default {
       this.$modal
         .confirm('确认要"' + text + '" "' + row.name + '" 领取小鸡吗？')
         .then(function () {
-          return changeSpuerStatus(row.id, row.superStatus);
+          return changeSuperStatus(row.id, row.superStatus);
         })
         .then(() => {
           this.$modal.msgSuccess(text + "成功");

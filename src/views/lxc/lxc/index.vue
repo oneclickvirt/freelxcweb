@@ -228,11 +228,11 @@
       </el-table-column>
       <el-table-column min-width="100"  label="领取人TGID" align="center"  >
         <template slot-scope="scope">
-            <router-link v-if="scope.row.lxcQueue" :to="{path:'/system/user',query:{tgId:scope.row.lxcQueue.tgId}}" class="link-type">
-                <span>{{ scope.row.lxcQueue.tgId }}</span>
+            <router-link v-if="scope.row.lxcQueueVo" :to="{path:'/system/user',query:{tgId:scope.row.lxcQueueVo.tgId}}" class="link-type">
+                <span>{{ scope.row.lxcQueueVo.tgId }}</span>
               </router-link>
               <span v-else>待领取</span>
-          </template>
+          </template> 
         </el-table-column>
 
       <el-table-column
