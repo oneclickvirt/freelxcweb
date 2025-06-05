@@ -106,12 +106,19 @@ export function listSuperCart() {
 }
 
 // 获取实例的网络流量图
-
 export function getNetImage(lxcId, type) {
   return request({
     url: "/lxc/getNetImage/" + lxcId + "/" + type,
     method: "get",
     responseType:'blob'
   });
+}
+
+// 删除小鸡，跟后台删除小鸡功能一致
+export function delLxcByUser(id) {
+  return request({
+    url: '/lxc/delLxcByUser/' + id,
+    method: 'delete'
+  })
 }
 

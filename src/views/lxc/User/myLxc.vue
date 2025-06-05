@@ -9,9 +9,9 @@
       <v-row>
         <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7')" :key="i">
           <v-hover v-slot="{ hover }">
-            <v-card :elevation="hover ? 8 : 2" :class="{ 'on-hover': hover }"
-              :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2"
-              @click="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 ? '' : lxcModifyTrue(myLxc.lxcId)">
+            <v-card :elevation="hover ? 8 : 2" :class="[{ 'on-hover': hover }, myLxc.lxcStatus == '6' ? 'forbid-card' : '']"
+              :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6"
+              @click="(myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6) ? '' : lxcModifyTrue(myLxc.lxcId)">
               <v-card-text>
                 <v-row no-gutters align="center">
                   <v-col cols="auto" class="mr-3">
@@ -20,10 +20,13 @@
                     </v-avatar>
                   </v-col>
                   <v-col>
-                    <div class="text-h6">{{ myLxc.childName }}</div>
+                    <div class="text-h6 d-flex align-center">
+                      {{ myLxc.childName }}
+                      <v-icon v-if="myLxc.lxcStatus == '6'" color="red" class="ml-2">mdi-close-circle</v-icon>
+                    </div>
                     <div class="text-subtitle-2">ID：{{ myLxc.lxcId }}</div>
                   </v-col>
-                  <v-col cols="auto">
+                  <v-col cols="auto" class="d-flex align-center">
                     <v-btn icon @click.stop="$refs[`menu-${i}`].open()">
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
@@ -185,7 +188,8 @@
             </v-card>
 
             <v-card class="mt-4">
-              <v-img :src="netImageSrc" :lazy-src="netImageSrc" aspect-ratio="2" class="grey lighten-2">
+              <v-img :src="netImageSrc" :lazy-src="netImageSrc" aspect-ratio="2" class="grey lighten-2"
+                max-width="100%" max-height="500" contain style="min-height:320px;">
                 <template v-slot:placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -318,6 +322,7 @@ export default {
         .then((response) => {
           if (response.code == 200) {
             this.myLxcItem = response.data;
+            console.log("myLxcItem:",this.myLxcItem);
           } else {
             this.$router.push("/home");
           }
@@ -470,5 +475,10 @@ export default {
 
 .v-card.on-hover:hover {
   transform: translateY(-5px);
+}
+
+.forbid-card {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
 }
 </style>

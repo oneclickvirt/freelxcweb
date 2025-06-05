@@ -369,7 +369,7 @@ export default {
     },
     submit() {
       if (!this.$refs.form.validate()) return;
-      // console.log("mirrorImage", this.mirrorImage);
+      console.log("mirrorImage", this.mirrorImage);
       // return;
       this.$emit("showOverlay");
       applyLxc({ lxcSuperId: this.selectedSuper.id,mirrorImage: this.mirrorImage})

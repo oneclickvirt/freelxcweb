@@ -125,7 +125,9 @@ export default {
         this.loading = false;
         if (this.captchaEnabled) {
           this.getCode();
+          // this.form.code = "";
         }
+        console.log("验证码输入：",this.form.code);
       });
     },
     handleRegister() {

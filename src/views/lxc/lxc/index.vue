@@ -108,17 +108,18 @@
       </el-form-item>
       <!-- <el-form-item label="创建时间" prop="superDate">
                 <el-date-picker class="my-date-picker"
-                    v-model="queryParams.superDate"
+                    v-model="queryParams.createTime"
                     clearable
                     @keyup.enter.native="handleQuery"
                     value-format="yyyy-MM-dd"
                     type="date"
                 ></el-date-picker>
             </el-form-item>
-            <el-form-item label="死亡时间" prop="superDead">
+      <el-form-item label="死亡时间" prop="superDead">
                 <el-date-picker class="my-date-picker"
-                    v-model="queryParams.superDead"
+                    v-model="queryParams.lxcQueueVo.endTime"
                     clearable
+                    disabled
                     @keyup.enter.native="handleQuery"
                     value-format="yyyy-MM-dd"
                     type="date"
@@ -212,7 +213,7 @@
       <el-table-column label="开始端口" align="center" prop="portStart" />
       <el-table-column label="结束端口" align="center" prop="portEnd" />
       <el-table-column min-width="140" label="创建时间" align="center" prop="createTime" />
-      <!-- <el-table-column min-width="95" label="到期时间" align="center" prop="superDead" /> -->
+      <el-table-column min-width="95" label="到期时间" align="center" prop="superDead" />
       <el-table-column label="小鸡状态" align="center" prop="lxcStatus">
         <template slot-scope="scope">
           <dict-tag
@@ -322,14 +323,14 @@
         <el-form-item label="结束端口" prop="portEnd">
           <el-input v-model="form.portEnd" placeholder="请输入结束端口" />
         </el-form-item>
-        <el-form-item label="创建时间" prop="superDate">
+        <!-- <el-form-item label="创建时间" prop="superDate">
           <el-date-picker
             v-model="form.superDate"
             style="width: 380px"
             value-format="yyyy-MM-dd"
             type="date"
           ></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="到期时间" prop="superDead">
           <el-date-picker
             v-model="form.superDead"
@@ -682,7 +683,13 @@ export default {
     getList() {
       this.loading = true;
       listLxc(this.queryParams).then((response) => {
+        // console.log("lxc list:", response.rows)
         this.lxcList = response.rows;
+        this.lxcList.forEach((item) => {
+          if (item.lxcQueueVo) {
+            item.superDead = item.lxcQueueVo.endTime;
+          }
+        });
         this.total = response.total;
         this.loading = false;
       });
@@ -754,15 +761,11 @@ export default {
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.loading = true;
       this.reset();
-      const id = row.id || this.ids;
-      getLxc(id).then((response) => {
-        this.loading = false;
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改小鸡信息";
-      });
+      // const id = row.id || this.ids;
+      this.form = row;
+      this.title = "修改小鸡信息";
+      this.open = true;
     },
     /** 提交按钮 */
     submitForm() {
