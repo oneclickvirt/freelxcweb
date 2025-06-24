@@ -75,3 +75,11 @@ export function changeSuperStatus(id, superStatus) {
     data: data
   })
 }
+
+// 获取镜像配置别名信息
+export function getImageAlias(way) {
+  return request({
+    url: '/lxc/superLxc/getImageAlias/' + way,
+    method: 'get'
+  })
+}
