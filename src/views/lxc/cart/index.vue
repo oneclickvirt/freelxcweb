@@ -365,14 +365,22 @@ export default {
           },
         ];
       }
-      return JSON.parse(list);
+      // return JSON.parse(list);
+      const items = JSON.parse(list);
+      console.log('imageList:', list)
+      return items.map((item) => {
+        if (item.alias && typeof item.alias === "string" && item.alias.includes(",")) {
+          return { ...item, alias: item.alias.split(",")[0] };
+        }
+        return { ...item, alias: item.alias.split(",")[0] };;
+      });
     },
     submit() {
       if (!this.$refs.form.validate()) return;
       console.log("mirrorImage", this.mirrorImage);
       // return;
       this.$emit("showOverlay");
-      applyLxc({ lxcSuperId: this.selectedSuper.id,mirrorImage: this.mirrorImage})
+      applyLxc({ lxcSuperId: this.selectedSuper.id, mirrorImage: this.mirrorImage})
         .then((res) => {
           this.applyMsg = res.msg;
           this.step++;
@@ -391,6 +399,8 @@ export default {
       listSuperCart()
         .then((res) => {
           this.superCartList = res;
+          console.log("superCartList", this.superCartList);
+          console.log('mirrorImage', this.mirrorImage)
           this.firstOverlay = false;
         })
         .catch((err) => {

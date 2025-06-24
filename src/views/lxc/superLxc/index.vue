@@ -752,6 +752,7 @@ export default {
             this.lxdConfig.templateJson.sourceConfig.push({
               "type": "image",
               "alias": alias,
+              // "remoteImage": "spiritlhl", // 远程镜像源直接写死
               "server": "https://lxdimages.spiritlhl.net/",
               "protocol": "simplestreams",
               "mode": "pull"
@@ -763,6 +764,7 @@ export default {
             this.incusConfig.templateJson.sourceConfig.push({
               "type": "image",
               "alias": alias,
+              // "remoteImage": "spiritlhl", // 远程镜像源直接写死
               "server": "https://lxdimages.spiritlhl.net/",
               "protocol": "simplestreams",
               "mode": "pull"

@@ -199,21 +199,21 @@
             </v-card>
 
             <v-row class="mt-4">
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-btn block color="primary" @click="lxcModify('start')">开机</v-btn>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-btn block color="warning" @click="lxcModify('restart')">重启</v-btn>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-btn block color="error" @click="lxcModify('stop')">关机</v-btn>
               </v-col>
-              <v-col cols="4">
+              <v-col cols="6">
                 <v-btn block color="warning" @click="lxcModify('reset')">重建</v-btn>
               </v-col>
-              <v-col cols="4">
+              <!-- <v-col cols="4">
                 <v-btn block color="error" @click="lxcDeleteDialog = true">删除主机</v-btn>
-              </v-col>
+              </v-col> -->
             </v-row>
           </v-container>
         </v-card-text>
