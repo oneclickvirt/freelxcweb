@@ -110,7 +110,7 @@
       <el-table-column label="小鸡IP地址" align="center" prop="ip" />
       <el-table-column label="ssh端口" align="center" prop="sshPort" />
       <el-table-column label="结束时间" align="center" prop="endTime" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" fixed="right" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"

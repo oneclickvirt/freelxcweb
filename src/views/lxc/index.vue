@@ -560,6 +560,7 @@ export default {
           }, 200);
           if (this.captchaEnabled) {
             this.getCode();
+            this.checkCode = '';
           }
         });
     },

@@ -241,6 +241,7 @@
         min-width="150"
         align="center"
         class-name="small-padding fixed-width"
+        fixed="right"
       >
         <template slot-scope="scope">
           <el-button

@@ -1,4 +1,4 @@
-queryForm<template>
+<template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="98px">
       <el-form-item :span="4" label="母鸡名称" prop="name">
@@ -90,16 +90,16 @@ queryForm<template>
 
     <el-table v-loading="loading" :data="superLxcList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="母鸡名称" align="center" prop="name" />
+      <el-table-column label="母鸡名称" align="center" prop="name" fixed="left" />
       <!-- <el-table-column label="ID" align="center" prop="id" v-if="true"/> -->
       <el-table-column align="center" width="55">
         <template slot-scope="scope">
           <v-icon class="fi mr-3" :class="`fi-${scope.row.tag}`" dark size="35" style="background-color: #f3f4f6; height: 33px !important" />
         </template>
       </el-table-column>
-      <el-table-column label="TAG" align="center" prop="tag" />
+      <el-table-column label="TAG" align="center" prop="tag" fixed="left"/>
 
-      <el-table-column width="130" label="母鸡IP" align="center" :show-overflow-tooltip="true">
+      <el-table-column width="130" label="母鸡IP" fixed="left" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <router-link :to="{ path: '/lxc/list', query: { ip: scope.row.ip } }" class="link-type">
             <span>{{ scope.row.ip }}</span>
@@ -144,7 +144,7 @@ queryForm<template>
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.expireFlag" />
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width" fixed="right">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-s-platform" v-hasPermi="['lxc-machine:superLxc:edit']">
             <router-link :to="{
@@ -353,6 +353,7 @@ import {
   addSuperLxc,
   updateSuperLxc,
   changeSuperStatus,
+  getImageAlias,
 } from "@/api/lxc/superLxc";
 import IpInput from "../../../components/IpInput/index.vue";
 import VueJsonPretty from 'vue-json-pretty';
@@ -435,54 +436,18 @@ export default {
       },
       // 模板JSON
       templateJson: {
-        sourceConfig: [],
         instanceConfig: {},
+        sourceConfig: [],
         rootLimits: {},
       },
-      default: {
+      lxdConfig: {
         templateJson: {
           instanceConfig: {
             "limitsCpuAllowance": "25ms/100ms",
             "limitsCpu": "1"
           },
           rootLimits: {},
-          sourceConfig: [
-/*             {
-                  "type": "image",
-                  "alias": "debian/11",
-                  "server": "https://mirrors.tuna.tsinghua.edu.cn/lxc-images",
-                  "protocol": "simplestreams",
-                  "mode": "pull"
-              },
-              {
-                  "type": "image",
-                  "alias": "ubuntu/20.04",
-                  "server": "https://mirrors.tuna.tsinghua.edu.cn/lxc-images",
-                  "protocol": "simplestreams",
-                  "mode": "pull"
-              },
-              {
-                  "type": "image",
-                  "alias": "almalinux/8",
-                  "server": "https://mirrors.tuna.tsinghua.edu.cn/lxc-images",
-                  "protocol": "simplestreams",
-                  "mode": "pull"
-              }*/
-              {
-                "type": "image",
-                "alias": "debian/12",
-                "server": "https://images.opsmaru.dev/spaces/9bfad87bd318b8f06012059a",
-                "protocol": "simplestreams",
-                "mode": "pull"
-              },
-              {
-                "type": "image",
-                "alias": "ubuntu/22.04",
-                "server": "https://images.opsmaru.dev/spaces/9bfad87bd318b8f06012059a",
-                "protocol": "simplestreams",
-                "mode": "pull"
-              }
-          ]
+          sourceConfig: []
         }
       },
       incusConfig: {
@@ -493,20 +458,20 @@ export default {
           },
           rootLimits: {},
           sourceConfig: [
-            {
-              "type":"image",
-              "alias":"debian/12",
-              "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
-              "protocol":"simplestreams",
-              "mode":"pull"
-            },
-            {
-              "type":"image",
-              "alias":"ubuntu/22.04",
-              "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
-              "protocol":"simplestreams",
-              "mode":"pull"
-            }
+            // {
+            //   "type":"image",
+            //   "alias":"debian/12",
+            //   "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
+            //   "protocol":"simplestreams",
+            //   "mode":"pull"
+            // },
+            // {
+            //   "type":"image",
+            //   "alias":"ubuntu/22.04",
+            //   "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
+            //   "protocol":"simplestreams",
+            //   "mode":"pull"
+            // }
           ]
         }
       },
@@ -538,12 +503,8 @@ export default {
         upLimit: 300,
         downLimit: 300,
         ipv6Flag: "N",
-        way: undefined,
+        way: 'lxd',
         prefix: undefined,
-
-      },
-      testJson: {
-        "hello": "vue"
       },
       // 表单校验
       rules: {
@@ -720,24 +681,13 @@ export default {
     };
   },
   watch: {
-    // "form.way": {
-    //   handler: function (val,oldVal) {
-    //     // console.log('val:',val);
-    //     if("lxd" === this.form.way) {
-    //       this.form.instanceConfig = this.default.templateJson.sourceConfig;
-    //     }else if("incus" === this.form.way){
-    //       this.form.instanceConfig = this.incusConfig.templateJson.sourceConfig;
-    //     }
-    //   }
-    // },
-
     "templateJson.rootLimits": {
       handler: function (val, oldVal) {
         console.log('val:', val);
         try {
           this.form.rootLimits = JSON.stringify(val);
         } catch (error) {
-          this.form.rootLimits = this.default.templateJson.rootLimits;
+          this.form.rootLimits = this.lxdConfig.templateJson.rootLimits;
         }
       },
       deep: true,
@@ -747,7 +697,7 @@ export default {
         try {
           this.form.instanceConfig = JSON.stringify(val);
         } catch (error) {
-          this.form.instanceConfig = this.default.templateJson.instanceConfig;
+          this.form.instanceConfig = this.lxdConfig.templateJson.instanceConfig;
         }
       },
       deep: true,
@@ -758,8 +708,15 @@ export default {
           this.form.sourceConfig = JSON.stringify(val);
         } catch (error) {
           console.log(error);
-          this.form.sourceConfig = this.default.templateJson.sourceConfig;
+          this.form.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
         }
+      },
+      deep: true,
+    },
+    "form.way": {
+      handler: function (val, oldVal) {
+        this.getImageAlias();
+        console.log('val:', val);
       },
       deep: true,
     },
@@ -773,6 +730,8 @@ export default {
     const ip = this.$route.query && this.$route.query.ip;
     this.queryParams.ip = ip;
     this.getList();
+    // 更新xxxConfig.template.sourceConfig
+    this.getImageAlias();
   },
   beforeRouteLeave(to, from, next) {
     //to是当前页面,from是从哪里来,next是放行
@@ -782,10 +741,41 @@ export default {
     next(); //切记操作完一定要记得放行,否则无法正常跳转页面
   },
   methods: {
+    getImageAlias() {
+      // this.lxcConfig.templateJson.sourceConfig = [];
+      // this.incusConfig.templateJson.sourceConfig = [];
+      getImageAlias(this.form.way).then((response) => {
+        console.log(response.data);
+        let aliases = response.data;
+        if ("lxd" === this.form.way) {
+          aliases.forEach(alias => {
+            this.lxdConfig.templateJson.sourceConfig.push({
+              "type": "image",
+              "alias": alias,
+              "server": "https://lxdimages.spiritlhl.net/",
+              "protocol": "simplestreams",
+              "mode": "pull"
+            });
+          });
+          // console.log('this.lxcConfig.templateJson.sourceConfig:', this.lxcConfig.templateJson.sourceConfig);
+        } else if ("incus" === this.form.way) {
+          aliases.forEach(alias => {
+            this.incusConfig.templateJson.sourceConfig.push({
+              "type": "image",
+              "alias": alias,
+              "server": "https://lxdimages.spiritlhl.net/",
+              "protocol": "simplestreams",
+              "mode": "pull"
+            });
+          });
+          // console.log('this.incusConfig.templateJson.sourceConfig:', this.incusConfig.templateJson.sourceConfig);
+        }
+      });
+    },
     changeWay(val) {
       console.log(val)
       if("lxd" === this.form.way) {
-        this.templateJson.sourceConfig = this.default.templateJson.sourceConfig;
+        this.templateJson.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
       }else if("incus" === this.form.way){
         this.templateJson.sourceConfig = this.incusConfig.templateJson.sourceConfig;
       }
@@ -817,9 +807,9 @@ export default {
     // 表单重置
     reset() {
       // this.templateJson = Object.assign(this.$data.templateJson, this.$options.data().templateJson);
-      this.templateJson.rootLimits = this.default.templateJson.rootLimits;
-      this.templateJson.instanceConfig = this.default.templateJson.instanceConfig;
-      this.templateJson.sourceConfig = this.default.templateJson.sourceConfig;
+      this.templateJson.rootLimits = this.lxdConfig.templateJson.rootLimits;
+      this.templateJson.instanceConfig = this.lxdConfig.templateJson.instanceConfig;
+      this.templateJson.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
       this.form = {
         id: undefined,
         name: undefined,
@@ -844,7 +834,7 @@ export default {
         upLimit: 300,
         downLimit: 300,
         ipv6Flag: "N",
-        way: undefined,
+        way: 'lxd',
         prefix: undefined,
       };
       this.resetForm("form");
