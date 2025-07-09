@@ -136,19 +136,19 @@
         <v-divider></v-divider>
 
         <div class="ml-10 mt-5 mr-10">
-          <v-text-field prepend-icon="mdi-identifier" name="tgId" v-model="tgId" :rules="[(v) => !!v || '用户名或TGID不能为空']"
+          <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-identifier" name="tgId" v-model="tgId" :rules="[(v) => !!v || '用户名或TGID不能为空']"
             label="TGID或用户名" required></v-text-field>
         </div>
 
         <div class="ml-10 mr-10">
-          <v-text-field prepend-icon="mdi-lock" :type="showPassword ? 'text' : 'password'"
+          <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-lock" :type="showPassword ? 'text' : 'password'"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" @click:append="showPassword = !showPassword"
             name="password" v-model="loginForm.password" :rules="[(v) => !!v || '密码不能为空']" label="密码" required>
           </v-text-field>
         </div>
         <div class="ml-10 mr-10">
           <div class="grid grid-cols-2 gap-12">
-            <v-text-field prepend-icon="mdi-check-decagram" v-model="checkCode" :counter="4" label="验证码"
+            <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-check-decagram" v-model="checkCode" :counter="4" label="验证码"
               required></v-text-field>
             <v-img class="w-full" @click="newCheckCode" :src="checkCodeUrl" :lazy-src="checkCodeUrl" max-height="50"
               max-width="140" contain>
@@ -161,9 +161,10 @@
           </div>
         </div>
 
-        <div class="text-center mt-5">
+        <div class="text-center mt-5" @keyup.enter="loginUser">
           <v-btn @click="loginUser" depressed rounded color="primary" width="200" dark>
-            登录</v-btn>
+            登录
+          </v-btn>
         </div>
 
         <v-card-actions>
