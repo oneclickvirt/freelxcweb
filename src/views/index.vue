@@ -40,17 +40,36 @@
       </el-col> -->
     </el-row>
     <el-divider />
+    <instance-usage-chart :instance="{
+      instancename: 'JpChick4',
+      cpu: 2.53310894E11,
+      memory: 1.83390208E8,
+      disk: 2.22793728E8,
+      recv: 1.1147512E7,
+      send: 382685.0,
+      limits: {
+        cpu: 4e11,
+        memory: 4e8,
+        disk: 5e8,
+        network: 2e7
+      }
+    }" />
   </div>
 </template>
 
 <script>
-import auth from '@/plugins/auth'
+import auth from '@/plugins/auth';
+import InstanceUsageChart from '@/components/InstanceUsageChart/instanceUsageChart.vue';
 export default {
   name: "Index",
+  components: {
+    InstanceUsageChart // 👈 注册组件
+  },
   data() {
     return {
       // 版本号
       version: "4.3.0",
+      ws: undefined
     };
   },
   mounted() {
@@ -65,12 +84,50 @@ export default {
         path: '/home'
       })
     }
+    this.connectWebSocket();
   },
   methods: {
     goTarget(href) {
       window.open(href, "_blank");
     },
-  },
+    // 连接 WebSocket
+    connectWebSocket() {
+      const socketUrl = "ws://localhost:1024/ws/container-data";
+      this.ws = new WebSocket(socketUrl);
+
+      this.ws.onopen = () => {
+        console.log("WebSocket 连接成功");
+      };
+
+      this.ws.onmessage = (event) => {
+        console.log("onMessage:",event.data);
+        // 假设返回的数据格式是 JSON
+        // const data = JSON.parse(event.data);
+        // this.cpu = data.cpu;
+        // this.memory = data.memory;
+        // this.disk = data.disk;
+        // this.sent = data.sent;
+        // this.recv = data.recv;
+
+        // // 根据数据更新图表或其他 UI 元素
+        // this.updateChart(data);
+      };
+
+      this.ws.onerror = (error) => {
+        console.error("WebSocket 出错:", error);
+      };
+
+      this.ws.onclose = () => {
+        console.log("WebSocket 连接关闭");
+      };
+    },
+
+    // 更新图表
+    updateChart(data) {
+      // 在这里调用你图表组件更新数据
+      console.log("更新图表数据", data);
+    }
+  }
 };
 </script>
 

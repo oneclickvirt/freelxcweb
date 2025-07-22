@@ -7,11 +7,11 @@
 
     <template v-else>
       <v-row>
-        <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7')" :key="i">
+        <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7' && item.lxcStatus !== '8')" :key="i">
           <v-hover v-slot="{ hover }">
             <v-card :elevation="hover ? 8 : 2" :class="[{ 'on-hover': hover }, myLxc.lxcStatus == '6' ? 'forbid-card' : '']"
-              :disabled="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6"
-              @click="(myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6) ? '' : lxcModifyTrue(myLxc.lxcId)">
+              :disabled="myLxc.lxcStatus == 0 || myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6"
+              @click="(myLxc.lxcStatus == 0 || myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6) ? '' : lxcModifyTrue(myLxc.lxcId)">
               <v-card-text>
                 <v-row no-gutters align="center">
                   <v-col cols="auto" class="mr-3">
@@ -56,7 +56,7 @@
                   </v-col>
                 </v-row>
               </v-card-text>
-              <v-overlay :value="myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" absolute>
+              <v-overlay :value="myLxc.lxcStatus == 0 || myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2" absolute>
                 <v-progress-circular indeterminate size="64"></v-progress-circular>
                 <div class="text-h5 mt-4">创建中</div>
               </v-overlay>
@@ -66,11 +66,35 @@
       </v-row>
 
       <v-divider class="my-6"></v-divider>
-
+      <!-- 已过期，待回收 / 流量已用完-->
       <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0">
-        <div class="text-h5 mb-4 grey--text">已过期，待回收</div>
+        <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0" class="text-h5 mb-4 grey--text">已过期，待回收</div>
         <v-row>
           <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '7')"
+            :key="i">
+            <v-card outlined>
+              <v-card-text>
+                <v-row no-gutters align="center">
+                  <v-col cols="auto" class="mr-3">
+                    <v-avatar tile color="grey" size="48">
+                      <v-icon dark :class="`fi fi-${myLxc.superTag}`"></v-icon>
+                    </v-avatar>
+                  </v-col>
+                  <v-col>
+                    <div class="text-h6 grey--text">{{ myLxc.childName }}</div>
+                    <div class="text-subtitle-2 grey--text">ID：{{ myLxc.lxcId }}</div>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </div>
+      <!-- 流量已用完 -->
+      <div v-if="myLxcItem.filter(item => item.lxcStatus === '8').length > 0">
+        <div v-if="myLxcItem.filter(item => item.lxcStatus === '8').length > 0" class="text-h5 mb-4 grey--text">流量已用完，每月1号可重新使用</div>
+        <v-row>
+          <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '8')"
             :key="i">
             <v-card outlined>
               <v-card-text>
@@ -402,30 +426,30 @@ export default {
       };
       this.lxcModifyDialog = false;
       if (this.lxcDeleteDialog) this.lxcDeleteDialog = false;
-      this.overlay = true;
+      // this.overlay = true;
       let _this = this;
       if (data.modifyType == 'reset') {
         resetLxcQueue(data.childName)
           .then((response) => {
-            this.overlay = false;
+            // this.overlay = false;
             this.tipSnackbarText = response.msg;
             this.tipSnackbar = true;
             this.userLxcList();
           })
           .catch(function (error) {
-            _this.overlay = false;
+            // _this.overlay = false;
             console.log(error);
           });
       } else {
         modifyLxc(data)
           .then((response) => {
-            this.overlay = false;
+            // this.overlay = false;
             this.tipSnackbarText = response.msg;
             this.tipSnackbar = true;
             this.userLxcList();
           })
           .catch(function (error) {
-            _this.overlay = false;
+            // _this.overlay = false;
             console.log(error);
           });
       }
