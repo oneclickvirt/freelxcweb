@@ -414,20 +414,256 @@ export default {
 };
 </script>
 
+
 <style lang="scss" scoped>
+// .status-indicator {
+//   width: 0.5rem;
+//   height: 0.5rem;
+//   border-radius: 50%;
+//   display: inline-block;
+//   margin-right: 0.5rem;
+// }
+
+// .cursor-pointer {
+//   cursor: pointer;
+// }
+
+// .position-absolute {
+//   position: absolute;
+// }
 .status-indicator {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
   border-radius: 50%;
   display: inline-block;
   margin-right: 0.5rem;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
 }
 
 .cursor-pointer {
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #e0e0e0 !important;
+    transform: translateY(-1px);
+  }
 }
 
 .position-absolute {
   position: absolute;
+}
+
+.v-container {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  min-height: 100vh;
+  padding-top: 2rem;
+}
+
+.v-card {
+  background: rgba(40, 40, 40, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .v-card-text {
+    color: #e0e0e0 !important;
+  }
+}
+
+.text-h4 {
+  background: linear-gradient(135deg, #ffffff, #e0e0e0);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em;
+}
+
+.v-row .v-col .v-card {
+  background: rgba(50, 50, 50, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+
+  .text-subtitle-1 {
+    color: #b0b0b0 !important;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.875rem !important;
+  }
+
+  .text-h5 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 1.75rem !important;
+  }
+}
+
+.v-alert {
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(8px);
+
+  &.v-alert--type-info {
+    background: rgba(33, 33, 33, 0.9) !important;
+    color: #e0e0e0 !important;
+    border-left: 4px solid #666 !important;
+  }
+
+  &[color="#E6A23C"] {
+    background: rgba(45, 39, 28, 0.9) !important;
+    color: #f5c842 !important;
+    border-left: 4px solid #e6a23c !important;
+  }
+}
+
+.v-dialog .v-card {
+  background: rgba(30, 30, 30, 0.98) !important;
+  backdrop-filter: blur(20px);
+
+  .v-card-title {
+    background: rgba(20, 20, 20, 0.8);
+    color: #ffffff !important;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px 16px 0 0 !important;
+  }
+
+  .v-card-text {
+    color: #e0e0e0 !important;
+
+    .v-card {
+      margin-bottom: 1rem;
+
+      &:hover {
+        background: rgba(60, 60, 60, 0.9) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+      }
+    }
+  }
+}
+
+.v-btn {
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.v-btn--contained.primary {
+    background: linear-gradient(135deg, #4a4a4a, #333333) !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+
+    &:hover {
+      background: linear-gradient(135deg, #555555, #3a3a3a) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+  }
+
+  &.v-btn--text.red--text {
+    color: #ff5252 !important;
+
+    &:hover {
+      background: rgba(255, 82, 82, 0.1) !important;
+    }
+  }
+
+  &.v-btn--icon {
+    &:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+}
+
+.v-divider {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.v-icon {
+  &[class*="fi-"] {
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.v-progress-circular {
+  color: #ffffff !important;
+}
+
+.v-progress-linear {
+  border-radius: 4px !important;
+
+  .v-progress-linear__background {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+}
+
+.v-overlay {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.7) !important;
+
+  .v-card {
+    border-radius: 12px !important;
+  }
+}
+
+.v-snackbar {
+  .v-snack__wrapper {
+    background: rgba(40, 40, 40, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px !important;
+    color: #e0e0e0 !important;
+  }
+
+  .v-btn {
+    color: #b0b0b0 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .v-container {
+    padding: 1rem;
+  }
+
+  .v-card {
+    margin-bottom: 1rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+::selection {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 </style>
