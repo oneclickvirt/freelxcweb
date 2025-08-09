@@ -3,7 +3,7 @@
   "version": "4.3.0",
   "description": "lxc",
   "scripts": {
-    "dev": "vue-cli-service serve", 
+    "dev": "vue-cli-service serve",
     "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
@@ -30,6 +30,7 @@
     "management-system"
   ],
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "@icon-park/vue": "^1.4.2",
     "@lottiefiles/lottie-player": "^1.5.7",
     "@riophae/vue-treeselect": "0.4.0",

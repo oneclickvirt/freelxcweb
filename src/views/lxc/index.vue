@@ -729,4 +729,543 @@ export default {
     }
   }
 }
+
+// #neon {
+//   // 主应用背景
+//   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
+//   min-height: 100vh;
+
+//   .home-main-container {
+//     height: 100%;
+//   }
+
+//   .theme--light.v-application {
+//     font-size: 14px;
+//     color: #e0e0e0 !important;
+//   }
+
+//   .v-menu__content {
+//     background: rgba(30, 30, 30, 0.98) !important;
+//     backdrop-filter: blur(20px);
+//     border: 1px solid rgba(255, 255, 255, 0.1) !important;
+//     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+//     border-radius: 12px !important;
+//   }
+
+//   // 应用栏样式
+//   #appbar {
+//     background: linear-gradient(135deg, #333333, #4a4a4a) !important;
+//     color: #ffffff !important;
+//     backdrop-filter: blur(10px);
+//     border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+//     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+
+//     #user-menu-button {
+//       text-transform: unset;
+//       background: rgba(255, 255, 255, 0.1) !important;
+//       backdrop-filter: blur(8px);
+//       border: 1px solid rgba(255, 255, 255, 0.15) !important;
+//       border-radius: 10px !important;
+//       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+//       &:hover {
+//         background: rgba(255, 255, 255, 0.15) !important;
+//         transform: translateY(-1px);
+//         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+//       }
+//     }
+
+//     button {
+//       color: #ffffff !important;
+//       border-radius: 8px !important;
+//       transition: all 0.3s ease;
+
+//       &:hover:not(.no-change) {
+//         background: rgba(255, 255, 255, 0.1) !important;
+//         transform: translateY(-1px);
+//       }
+//     }
+
+//     button:not(.no-change) {
+//       height: inherit;
+//     }
+
+//     .v-toolbar__title {
+//       padding-left: 8px;
+//       font-weight: 600 !important;
+//       color: #ffffff !important;
+//       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+//     }
+
+//     #searchbar {
+//       .v-input {
+//         width: 296px;
+//         background: rgba(255, 255, 255, 0.1) !important;
+//         border-radius: 8px !important;
+//         backdrop-filter: blur(8px);
+
+//         .v-icon {
+//           color: #b0b0b0 !important;
+//         }
+//       }
+
+//       button {
+//         color: #b0b0b0 !important;
+
+//         &:hover {
+//           color: #e0e0e0 !important;
+//         }
+//       }
+//     }
+
+//     #user-menu-button {
+//       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+
+//       .el-icon-caret-bottom {
+//         cursor: pointer;
+//         font-size: 12px;
+//         color: #e0e0e0 !important;
+//         transition: transform 0.2s ease;
+//       }
+
+//       &:hover .el-icon-caret-bottom {
+//         transform: rotate(180deg);
+//       }
+//     }
+
+//     #user-menu-dropdown {
+//       width: 290px;
+//       background: rgba(30, 30, 30, 0.98) !important;
+//       backdrop-filter: blur(20px);
+//       border: 1px solid rgba(255, 255, 255, 0.1) !important;
+//       border-radius: 16px !important;
+//       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+
+//       .v-divider {
+//         border-color: rgba(255, 255, 255, 0.12) !important;
+//       }
+
+//       .v-btn,
+//       .v-input__control {
+//         height: 32px;
+//         min-height: 32px;
+//         border-radius: 8px !important;
+//       }
+
+//       .avatar-head {
+//         height: 50px !important;
+//         min-width: 50px !important;
+//         width: 50px !important;
+//         border-radius: 12px !important;
+//         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+//         border: 2px solid rgba(255, 255, 255, 0.1);
+//       }
+
+//       .v-icon {
+//         color: #e0e0e0 !important;
+//       }
+
+//       .v-list-item {
+//         color: #e0e0e0 !important;
+//         border-radius: 8px !important;
+//         margin: 2px 8px;
+//         transition: all 0.2s ease;
+
+//         &:hover {
+//           background: rgba(255, 255, 255, 0.1) !important;
+//           transform: translateX(4px);
+//         }
+
+//         .v-list-item-title {
+//           color: #ffffff !important;
+//           font-weight: 500;
+//         }
+
+//         .v-list-item-subtitle {
+//           color: #b0b0b0 !important;
+//         }
+//       }
+//     }
+//   }
+
+//   // 导航抽屉样式
+//   .v-navigation-drawer {
+//     background: rgba(25, 25, 25, 0.98) !important;
+//     backdrop-filter: blur(20px);
+//     border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+//     box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3) !important;
+
+//     .v-list-item {
+//       color: #e0e0e0 !important;
+//       border-radius: 12px !important;
+//       margin: 4px 8px;
+//       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+//       &:hover {
+//         background: rgba(255, 255, 255, 0.1) !important;
+//         transform: translateX(4px);
+//         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+//       }
+
+//       &.v-list-item--active {
+//         background: rgba(255, 255, 255, 0.15) !important;
+//         color: #ffffff !important;
+
+//         &::before {
+//           opacity: 0;
+//         }
+//       }
+
+//       .v-list-item-avatar {
+//         border-radius: 12px !important;
+//         border: 2px solid rgba(255, 255, 255, 0.1);
+//         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+//       }
+
+//       .v-list-item-icon {
+//         .v-icon {
+//           color: #e0e0e0 !important;
+//           transition: all 0.2s ease;
+//         }
+//       }
+
+//       &:hover .v-list-item-icon .v-icon {
+//         color: #ffffff !important;
+//         transform: scale(1.1);
+//       }
+
+//       .v-list-item-title {
+//         color: #e0e0e0 !important;
+//         font-weight: 500;
+//       }
+
+//       &:hover .v-list-item-title {
+//         color: #ffffff !important;
+//       }
+//     }
+
+//     .v-btn {
+//       background: rgba(255, 255, 255, 0.1) !important;
+//       color: #e0e0e0 !important;
+//       border: 1px solid rgba(255, 255, 255, 0.15) !important;
+//       border-radius: 10px !important;
+//       transition: all 0.3s ease;
+
+//       &:hover {
+//         background: rgba(255, 255, 255, 0.15) !important;
+//         color: #ffffff !important;
+//         transform: translateY(-2px);
+//         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+//       }
+//     }
+//   }
+
+//   // 主内容区域
+//   .v-main {
+//     background: transparent;
+
+//     .v-container {
+//       &.pa-0 {
+//         padding: 0;
+//       }
+
+//       &:not(.pa-0) {
+//         background: rgba(20, 20, 20, 0.3);
+//         backdrop-filter: blur(5px);
+//         border-radius: 16px;
+//         margin: 1rem;
+//         border: 1px solid rgba(255, 255, 255, 0.05);
+//       }
+//     }
+//   }
+
+//   // 对话框样式
+//   .v-dialog {
+//     .v-card {
+//       background: rgba(30, 30, 30, 0.98) !important;
+//       backdrop-filter: blur(20px);
+//       border: 1px solid rgba(255, 255, 255, 0.1) !important;
+//       border-radius: 20px !important;
+//       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+
+//       .v-card-title {
+//         background: rgba(20, 20, 20, 0.8);
+//         color: #ffffff !important;
+//         font-weight: 600;
+//         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+//         border-radius: 20px 20px 0 0;
+//       }
+
+//       .v-card-text {
+//         color: #e0e0e0 !important;
+//       }
+
+//       .v-btn {
+//         border-radius: 10px !important;
+//         font-weight: 600 !important;
+//         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+//         &.v-btn--contained.primary {
+//           background: linear-gradient(135deg, #4a4a4a, #333333) !important;
+//           color: #ffffff !important;
+//           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+
+//           &:hover {
+//             background: linear-gradient(135deg, #555555, #3a3a3a) !important;
+//             transform: translateY(-2px);
+//             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+//           }
+//         }
+
+//         &.v-btn--text {
+//           color: #b0b0b0 !important;
+
+//           &:hover {
+//             background: rgba(255, 255, 255, 0.1) !important;
+//             color: #e0e0e0 !important;
+//           }
+//         }
+
+//         &.v-btn--icon {
+//           background: transparent !important;
+
+//           &:hover {
+//             background: rgba(255, 255, 255, 0.1) !important;
+//           }
+
+//           .v-icon {
+//             color: #e0e0e0 !important;
+//           }
+//         }
+//       }
+//     }
+//   }
+
+//   // 表单元素样式
+//   .v-text-field {
+//     .v-input__control {
+//       background: rgba(50, 50, 50, 0.8) !important;
+//       border-radius: 8px !important;
+//       border: 1px solid rgba(255, 255, 255, 0.1) !important;
+//     }
+
+//     .v-label {
+//       color: #b0b0b0 !important;
+//     }
+
+//     .v-input__slot {
+//       background: transparent !important;
+
+//       input {
+//         color: #e0e0e0 !important;
+//       }
+//     }
+
+//     .v-icon {
+//       color: #b0b0b0 !important;
+//     }
+
+//     &.v-input--is-focused {
+//       .v-input__control {
+//         border-color: rgba(255, 255, 255, 0.3) !important;
+//       }
+//     }
+//   }
+
+//   // 芯片样式
+//   .v-chip {
+//     background: rgba(50, 50, 50, 0.8) !important;
+//     border: 1px solid rgba(255, 255, 255, 0.1) !important;
+//     color: #e0e0e0 !important;
+//     border-radius: 12px !important;
+//     transition: all 0.3s ease;
+
+//     &:hover {
+//       background: rgba(60, 60, 60, 0.9) !important;
+//       transform: translateY(-1px);
+//       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+//     }
+
+//     &.green {
+//       background: rgba(46, 125, 50, 0.8) !important;
+//       border-color: rgba(76, 175, 80, 0.3) !important;
+//     }
+
+//     &.blue {
+//       background: rgba(25, 118, 210, 0.8) !important;
+//       border-color: rgba(33, 150, 243, 0.3) !important;
+//     }
+
+//     .v-avatar {
+//       background: rgba(255, 255, 255, 0.2) !important;
+//       color: #ffffff !important;
+//       font-weight: 600;
+//     }
+//   }
+
+//   // 网格布局
+//   .grid {
+//     &.grid-cols-2 {
+//       gap: 1rem;
+//     }
+//   }
+
+//   // 图片样式
+//   .v-img {
+//     border-radius: 8px !important;
+//     border: 1px solid rgba(255, 255, 255, 0.1);
+//     transition: all 0.3s ease;
+
+//     &:hover {
+//       transform: scale(1.02);
+//       border-color: rgba(255, 255, 255, 0.2);
+//     }
+//   }
+
+//   // 通知条样式
+//   .v-snackbar {
+//     .v-snack__wrapper {
+//       background: rgba(40, 40, 40, 0.95) !important;
+//       backdrop-filter: blur(12px);
+//       border: 1px solid rgba(255, 255, 255, 0.1);
+//       border-radius: 12px !important;
+//       color: #e0e0e0 !important;
+//       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+//     }
+
+//     .v-btn {
+//       color: #b0b0b0 !important;
+
+//       &:hover {
+//         color: #e0e0e0 !important;
+//       }
+//     }
+//   }
+
+//   // 覆盖层样式
+//   .v-overlay {
+//     backdrop-filter: blur(8px);
+//     background: rgba(0, 0, 0, 0.7) !important;
+
+//     .v-dialog .v-card {
+//       background: rgba(40, 40, 40, 0.95) !important;
+//       border: 1px solid rgba(255, 255, 255, 0.1);
+//       border-radius: 12px !important;
+
+//       .v-card-text {
+//         color: #e0e0e0 !important;
+//       }
+
+//       .v-progress-linear {
+//         border-radius: 4px;
+
+//         .v-progress-linear__background {
+//           background: rgba(255, 255, 255, 0.1) !important;
+//         }
+
+//         .v-progress-linear__determinate,
+//         .v-progress-linear__indeterminate .long,
+//         .v-progress-linear__indeterminate .short {
+//           background: #ffffff !important;
+//         }
+//       }
+//     }
+//   }
+
+//   // 分隔线
+//   .v-divider {
+//     border-color: rgba(255, 255, 255, 0.12) !important;
+//     opacity: 0.6;
+//   }
+
+//   // 进度指示器
+//   .v-progress-circular {
+//     color: #ffffff !important;
+//   }
+
+//   // 员工部门区域
+//   #employee-dept {
+//     background: rgba(20, 20, 20, 0.5);
+//     border-radius: 8px;
+//     margin: 8px 0;
+//   }
+
+//   // 表单验证
+//   .v-messages {
+//     color: #ff5252 !important;
+//   }
+
+//   // 提示文本
+//   .v-text-field .v-input__slot {
+//     .v-text-field__details {
+//       .v-messages {
+//         color: #b0b0b0 !important;
+//       }
+//     }
+//   }
+// }
+
+// // 响应式设计
+// @media (max-width: 768px) {
+//   #neon {
+//     #appbar #user-menu-dropdown {
+//       width: 260px;
+//     }
+
+//     .v-navigation-drawer {
+//       .v-list-item {
+//         margin: 2px 4px;
+//       }
+//     }
+
+//     .v-dialog .v-card {
+//       margin: 1rem;
+//       border-radius: 16px !important;
+//     }
+//   }
+// }
+
+// // 滚动条样式
+// ::-webkit-scrollbar {
+//   width: 8px;
+//   height: 8px;
+// }
+
+// ::-webkit-scrollbar-track {
+//   background: rgba(255, 255, 255, 0.05);
+//   border-radius: 4px;
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background: rgba(255, 255, 255, 0.2);
+//   border-radius: 4px;
+
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.3);
+//   }
+// }
+
+// // 文本选择样式
+// ::selection {
+//   background: rgba(255, 255, 255, 0.2);
+//   color: #ffffff;
+// }
+
+// // 动画效果
+// @keyframes shimmer {
+//   0% {
+//     background-position: -1000px 0;
+//   }
+
+//   100% {
+//     background-position: 1000px 0;
+//   }
+// }
+
+// // 焦点状态
+// *:focus {
+//   outline: 2px solid rgba(255, 255, 255, 0.3) !important;
+//   outline-offset: 2px;
+//   border-radius: 4px;
+// }
 </style>
