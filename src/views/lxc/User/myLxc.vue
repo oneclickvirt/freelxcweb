@@ -7,11 +7,9 @@
 
     <template v-else>
       <v-row>
-        <v-col cols="12" sm="6" md="4"
-          v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7' && item.lxcStatus !== '8')" :key="i">
+        <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus !== '7' && item.lxcStatus !== '8')" :key="i">
           <v-hover v-slot="{ hover }">
-            <v-card :elevation="hover ? 8 : 2"
-              :class="[{ 'on-hover': hover }, myLxc.lxcStatus == '6' ? 'forbid-card' : '']"
+            <v-card :elevation="hover ? 8 : 2" :class="[{ 'on-hover': hover }, myLxc.lxcStatus == '6' ? 'forbid-card' : '']"
               :disabled="myLxc.lxcStatus == 0 || myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6"
               @click="(myLxc.lxcStatus == 0 || myLxc.lxcStatus == 1 || myLxc.lxcStatus == 2 || myLxc.lxcStatus == 6) ? '' : lxcModifyTrue(myLxc.lxcId)">
               <v-card-text>
@@ -70,8 +68,7 @@
       <v-divider class="my-6"></v-divider>
       <!-- 已过期，待回收 / 流量已用完-->
       <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0">
-        <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0" class="text-h5 mb-4 grey--text">已过期，待回收
-        </div>
+        <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0" class="text-h5 mb-4 grey--text">已过期，待回收</div>
         <v-row>
           <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '7')"
             :key="i">
@@ -95,8 +92,7 @@
       </div>
       <!-- 流量已用完 -->
       <div v-if="myLxcItem.filter(item => item.lxcStatus === '8').length > 0">
-        <div v-if="myLxcItem.filter(item => item.lxcStatus === '8').length > 0" class="text-h5 mb-4 grey--text">
-          流量已用完，每月1号可重新使用</div>
+        <div v-if="myLxcItem.filter(item => item.lxcStatus === '8').length > 0" class="text-h5 mb-4 grey--text">流量已用完，每月1号可重新使用</div>
         <v-row>
           <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '8')"
             :key="i">
@@ -216,8 +212,8 @@
             </v-card>
 
             <v-card class="mt-4">
-              <v-img :src="netImageSrc" :lazy-src="netImageSrc" aspect-ratio="2" class="grey lighten-2" max-width="100%"
-                max-height="500" contain style="min-height:320px;">
+              <v-img :src="netImageSrc" :lazy-src="netImageSrc" aspect-ratio="2" class="grey lighten-2"
+                max-width="100%" max-height="500" contain style="min-height:320px;">
                 <template v-slot:placeholder>
                   <v-row class="fill-height ma-0" align="center" justify="center">
                     <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
@@ -350,7 +346,7 @@ export default {
         .then((response) => {
           if (response.code == 200) {
             this.myLxcItem = response.data;
-            console.log("myLxcItem:", this.myLxcItem);
+            console.log("myLxcItem:",this.myLxcItem);
           } else {
             this.$router.push("/home");
           }
@@ -493,424 +489,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .cursor-pointer {
-//   cursor: pointer;
-// }
-
-// .v-card.on-hover {
-//   transition: all 0.3s ease-in-out;
-// }
-
-// .v-card.on-hover:hover {
-//   transform: translateY(-5px);
-// }
-
-// .forbid-card {
-//   cursor: not-allowed !important;
-//   pointer-events: auto !important;
-// }
-
 .cursor-pointer {
   cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: #e0e0e0 !important;
-    transform: translateY(-1px);
-  }
 }
 
-.v-container {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  min-height: 100vh;
-  padding-top: 2rem;
+.v-card.on-hover {
+  transition: all 0.3s ease-in-out;
 }
 
-.text-center.my-16 {
-  .v-icon {
-    opacity: 0.3;
-    margin-bottom: 1rem;
-  }
-
-  .text-h4 {
-    background: linear-gradient(135deg, #666666, #999999);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 300;
-  }
+.v-card.on-hover:hover {
+  transform: translateY(-5px);
 }
 
-.v-card {
-  background: rgba(40, 40, 40, 0.95) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(255, 255, 255, 0.05) !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-
-  &.on-hover:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.15) !important;
-  }
-
-  &.forbid-card {
-    cursor: not-allowed !important;
-    pointer-events: auto !important;
-    opacity: 0.6;
-    filter: grayscale(0.3);
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: repeating-linear-gradient(45deg,
-          transparent,
-          transparent 10px,
-          rgba(255, 0, 0, 0.1) 10px,
-          rgba(255, 0, 0, 0.1) 20px);
-      z-index: 1;
-    }
-  }
-
-  &.v-card--outlined {
-    background: rgba(30, 30, 30, 0.8) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-
-    .v-avatar {
-      opacity: 0.6;
-    }
-
-    .text-h6,
-    .text-subtitle-2 {
-      opacity: 0.7;
-    }
-  }
-
-  .v-card-text {
-    color: #e0e0e0 !important;
-    position: relative;
-    z-index: 2;
-  }
-}
-
-.v-avatar {
-  border-radius: 12px !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-
-  &.primary {
-    background: linear-gradient(135deg, #4a4a4a, #333333) !important;
-  }
-
-  &.grey {
-    background: linear-gradient(135deg, #666666, #555555) !important;
-  }
-
-  .v-icon {
-    &[class*="fi-"] {
-      border-radius: 4px;
-      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    }
-  }
-}
-
-.text-h6 {
-  color: #ffffff !important;
-  font-weight: 600 !important;
-  font-size: 1.25rem !important;
-
-  .v-icon {
-    filter: drop-shadow(0 0 4px rgba(255, 82, 82, 0.5));
-  }
-}
-
-.text-subtitle-2 {
-  color: #b0b0b0 !important;
-  font-size: 0.875rem !important;
-  opacity: 0.8;
-}
-
-.text-overline {
-  color: #999999 !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase;
-  font-size: 0.75rem !important;
-  margin-bottom: 0.25rem;
-}
-
-.text-h5 {
-  color: #cccccc !important;
-  font-weight: 500 !important;
-  margin-bottom: 1rem;
-
-  &.grey--text {
-    background: linear-gradient(135deg, #666666, #888888);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
-.v-divider {
-  border-color: rgba(255, 255, 255, 0.12) !important;
-  margin: 1rem 0;
-}
-
-.v-btn {
-  border-radius: 10px !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  letter-spacing: 0.02em;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &.v-btn--icon {
-    background: rgba(255, 255, 255, 0.05) !important;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-      transform: scale(1.1);
-    }
-  }
-
-  &.v-btn--block {
-    height: 48px !important;
-
-    &.primary {
-      background: linear-gradient(135deg, #4a4a4a, #333333) !important;
-      color: #ffffff !important;
-
-      &:hover {
-        background: linear-gradient(135deg, #555555, #3a3a3a) !important;
-        transform: translateY(-2px);
-      }
-    }
-
-    &.warning {
-      background: linear-gradient(135deg, #e6a23c, #d4941a) !important;
-      color: #ffffff !important;
-
-      &:hover {
-        background: linear-gradient(135deg, #f5b041, #e6a23c) !important;
-        transform: translateY(-2px);
-      }
-    }
-
-    &.error {
-      background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
-      color: #ffffff !important;
-
-      &:hover {
-        background: linear-gradient(135deg, #f1556c, #e74c3c) !important;
-        transform: translateY(-2px);
-      }
-    }
-  }
-
-  &.v-btn--text {
-    &.grey {
-      color: #b0b0b0 !important;
-
-      &:hover {
-        background: rgba(176, 176, 176, 0.1) !important;
-      }
-    }
-
-    &.red {
-      color: #ff5252 !important;
-
-      &:hover {
-        background: rgba(255, 82, 82, 0.1) !important;
-      }
-    }
-  }
-}
-
-.v-dialog {
-  .v-card {
-    background: rgba(30, 30, 30, 0.98) !important;
-    backdrop-filter: blur(20px);
-
-    .v-card-title,
-    .v-toolbar-title {
-      color: #ffffff !important;
-      font-weight: 600;
-    }
-
-    .v-toolbar {
-      background: rgba(20, 20, 20, 0.9) !important;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .v-card-text {
-      color: #e0e0e0 !important;
-
-      .v-card {
-        margin-bottom: 1rem;
-
-        &:hover {
-          background: rgba(60, 60, 60, 0.9) !important;
-          border-color: rgba(255, 255, 255, 0.2) !important;
-        }
-      }
-    }
-  }
-}
-
-.v-menu__content {
-  background: rgba(40, 40, 40, 0.95) !important;
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
-
-  .v-list {
-    background: transparent !important;
-
-    .v-list-item {
-      color: #e0e0e0 !important;
-      border-radius: 8px;
-      margin: 4px 8px;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-      }
-
-      .v-list-item-title {
-        font-weight: 500;
-      }
-    }
-  }
-}
-
-.v-alert {
-  border-radius: 12px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(8px);
-
-  &.v-alert--type-info {
-    background: rgba(33, 33, 33, 0.9) !important;
-    color: #e0e0e0 !important;
-    border-left: 4px solid #666 !important;
-  }
-
-  &.v-alert--type-success {
-    background: rgba(27, 94, 32, 0.2) !important;
-    color: #a5d6a7 !important;
-    border-left: 4px solid #4caf50 !important;
-  }
-}
-
-.v-overlay {
-  backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.7) !important;
-
-  .v-progress-circular {
-    color: #ffffff !important;
-  }
-
-  .v-card {
-    border-radius: 12px !important;
-  }
-
-  .text-h5 {
-    color: #ffffff !important;
-    margin-top: 1rem;
-    font-weight: 300;
-  }
-}
-
-.v-img {
-  border-radius: 12px !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  .v-responsive__content {
-    backdrop-filter: blur(4px);
-  }
-}
-
-.v-snackbar {
-  .v-snack__wrapper {
-    background: rgba(40, 40, 40, 0.95) !important;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px !important;
-    color: #e0e0e0 !important;
-  }
-
-  .v-btn {
-    color: #b0b0b0 !important;
-  }
-}
-
-.v-toolbar {
-  .v-btn--icon {
-    .v-icon {
-      color: #ffffff !important;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .v-container {
-    padding: 1rem;
-  }
-
-  .v-card {
-    margin-bottom: 1rem;
-  }
-
-  .v-dialog--fullscreen .v-card {
-    border-radius: 0 !important;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-}
-
-::selection {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.1);
-  }
-
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-  }
-
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-  }
-}
-
-.v-card:hover {
-  animation: pulse 2s infinite;
+.forbid-card {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
 }
 </style>

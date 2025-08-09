@@ -136,8 +136,8 @@
         <v-divider></v-divider>
 
         <div class="ml-10 mt-5 mr-10">
-          <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-identifier" name="tgId" v-model="tgId"
-            :rules="[(v) => !!v || '用户名或TGID不能为空']" label="TGID或用户名" required></v-text-field>
+          <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-identifier" name="tgId" v-model="tgId" :rules="[(v) => !!v || '用户名或TGID不能为空']"
+            label="TGID或用户名" required></v-text-field>
         </div>
 
         <div class="ml-10 mr-10">
@@ -148,8 +148,8 @@
         </div>
         <div class="ml-10 mr-10">
           <div class="grid grid-cols-2 gap-12">
-            <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-check-decagram" v-model="checkCode" :counter="4"
-              label="验证码" required></v-text-field>
+            <v-text-field @keyup.enter="loginUser" prepend-icon="mdi-check-decagram" v-model="checkCode" :counter="4" label="验证码"
+              required></v-text-field>
             <v-img class="w-full" @click="newCheckCode" :src="checkCodeUrl" :lazy-src="checkCodeUrl" max-height="50"
               max-width="140" contain>
               <template v-slot:placeholder>
@@ -484,7 +484,7 @@ export default {
       this.regDialog = true;
       this.newCheckCode();
     },
-
+    
     switchToLogin() {
       this.regDialog = false;
       this.loginDialog = true;
@@ -643,54 +643,33 @@ export default {
 
 <style lang="scss" scoped>
 #neon {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%) !important;
-  min-height: 100vh;
-
   .home-main-container {
     height: 100%;
   }
 
   .theme--light.v-application {
     font-size: 14px;
-    color: #e0e0e0 !important;
+    color: #323232;
   }
 
   .v-menu__content {
-    background: #1e1e1e !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
-    border-radius: 12px !important;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2),
+      0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
+    border-radius: 2px;
+  }
+
+  #appbar:not(.theme--dark) {
+    background: linear-gradient(45deg, #005bac, #1578cf);
+    color: #ffffff;
   }
 
   #appbar {
-    background: linear-gradient(135deg, #333333, #4a4a4a) !important;
-    color: #ffffff !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
-
     #user-menu-button {
       text-transform: unset;
-      background: rgba(255, 255, 255, 0.1) !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      border-radius: 10px !important;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-      }
     }
 
     button {
-      color: #ffffff !important;
-      border-radius: 8px !important;
-      transition: all 0.3s ease;
-
-      &:hover:not(.no-change) {
-        background: rgba(255, 255, 255, 0.1) !important;
-        transform: translateY(-1px);
-      }
+      color: #ffffff;
     }
 
     button:not(.no-change) {
@@ -699,465 +678,55 @@ export default {
 
     .v-toolbar__title {
       padding-left: 8px;
-      font-weight: 600 !important;
-      color: #ffffff !important;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     #searchbar {
       .v-input {
         width: 296px;
-        background: rgba(255, 255, 255, 0.1) !important;
-        border-radius: 8px !important;
 
         .v-icon {
-          color: #b0b0b0 !important;
+          color: #505050;
         }
       }
 
       button {
-        color: #b0b0b0 !important;
-
-        &:hover {
-          color: #e0e0e0 !important;
-        }
+        color: #505050;
       }
     }
 
     #user-menu-button {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+      background-color: transparent;
+      box-shadow: none;
 
       .el-icon-caret-bottom {
         cursor: pointer;
         font-size: 12px;
-        color: #e0e0e0 !important;
-        transition: transform 0.2s ease;
-      }
-
-      &:hover .el-icon-caret-bottom {
-        transform: rotate(180deg);
       }
     }
 
     #user-menu-dropdown {
       width: 290px;
-      background: #1e1e1e !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 16px !important;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
 
       .v-divider {
-        border-color: rgba(255, 255, 255, 0.12) !important;
+        border-color: #e0e0e0;
       }
 
       .v-btn,
       .v-input__control {
         height: 32px;
         min-height: 32px;
-        border-radius: 8px !important;
       }
 
       .avatar-head {
         height: 50px !important;
         min-width: 50px !important;
         width: 50px !important;
-        border-radius: 12px !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        border: 2px solid rgba(255, 255, 255, 0.1);
       }
 
-      .v-icon {
-        color: #e0e0e0 !important;
-      }
-
-      .v-list-item {
-        color: #e0e0e0 !important;
-        border-radius: 8px !important;
-        margin: 2px 8px;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.1) !important;
-          transform: translateX(4px);
-        }
-
-        .v-list-item-title {
-          color: #ffffff !important;
-          font-weight: 500;
-        }
-
-        .v-list-item-subtitle {
-          color: #b0b0b0 !important;
-        }
+      .v-icon:not(.theme--dark) {
+        color: #323232;
       }
     }
-  }
-
-  .v-navigation-drawer {
-    background: #191919 !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 4px 0 16px rgba(0, 0, 0, 0.3) !important;
-
-    .v-list-item {
-      color: #e0e0e0 !important;
-      border-radius: 12px !important;
-      margin: 4px 8px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.1) !important;
-        transform: translateX(4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      }
-
-      &.v-list-item--active {
-        background: rgba(255, 255, 255, 0.15) !important;
-        color: #ffffff !important;
-
-        &::before {
-          opacity: 0;
-        }
-      }
-
-      .v-list-item-avatar {
-        border-radius: 12px !important;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      }
-
-      .v-list-item-icon {
-        .v-icon {
-          color: #e0e0e0 !important;
-          transition: all 0.2s ease;
-        }
-      }
-
-      &:hover .v-list-item-icon .v-icon {
-        color: #ffffff !important;
-        transform: scale(1.1);
-      }
-
-      .v-list-item-title {
-        color: #e0e0e0 !important;
-        font-weight: 500;
-      }
-
-      &:hover .v-list-item-title {
-        color: #ffffff !important;
-      }
-    }
-
-    .v-btn {
-      background: rgba(255, 255, 255, 0.1) !important;
-      color: #e0e0e0 !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      border-radius: 10px !important;
-      transition: all 0.3s ease;
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.15) !important;
-        color: #ffffff !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
-      }
-    }
-  }
-
-  .v-main {
-    background: transparent;
-
-    .v-container {
-      &.pa-0 {
-        padding: 0;
-      }
-
-      &:not(.pa-0) {
-        background: rgba(20, 20, 20, 0.3);
-        border-radius: 16px;
-        margin: 1rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
-      }
-    }
-  }
-
-  .v-dialog {
-    .v-card {
-      background: #1e1e1e !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-      border-radius: 20px !important;
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
-
-      .v-card-title {
-        background: rgba(20, 20, 20, 0.8);
-        color: #ffffff !important;
-        font-weight: 600;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px 20px 0 0;
-      }
-
-      .v-card-text {
-        color: #e0e0e0 !important;
-      }
-
-      .v-btn {
-        border-radius: 10px !important;
-        font-weight: 600 !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-        &.v-btn--contained.primary {
-          background: linear-gradient(135deg, #4a4a4a, #333333) !important;
-          color: #ffffff !important;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
-
-          &:hover {
-            background: linear-gradient(135deg, #555555, #3a3a3a) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
-          }
-        }
-
-        &.v-btn--text {
-          color: #b0b0b0 !important;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.1) !important;
-            color: #e0e0e0 !important;
-          }
-        }
-
-        &.v-btn--icon {
-          background: transparent !important;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.1) !important;
-          }
-
-          .v-icon {
-            color: #e0e0e0 !important;
-          }
-        }
-      }
-    }
-  }
-
-  .v-text-field {
-    .v-input__control {
-      background: rgba(50, 50, 50, 0.8) !important;
-      border-radius: 8px !important;
-      border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .v-label {
-      color: #b0b0b0 !important;
-    }
-
-    .v-input__slot {
-      background: transparent !important;
-
-      input {
-        color: #e0e0e0 !important;
-      }
-    }
-
-    .v-icon {
-      color: #b0b0b0 !important;
-    }
-
-    &.v-input--is-focused {
-      .v-input__control {
-        border-color: rgba(255, 255, 255, 0.3) !important;
-      }
-    }
-  }
-
-  .v-chip {
-    background: rgba(50, 50, 50, 0.8) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #e0e0e0 !important;
-    border-radius: 12px !important;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background: rgba(60, 60, 60, 0.9) !important;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    &.green {
-      background: rgba(46, 125, 50, 0.8) !important;
-      border-color: rgba(76, 175, 80, 0.3) !important;
-    }
-
-    &.blue {
-      background: rgba(25, 118, 210, 0.8) !important;
-      border-color: rgba(33, 150, 243, 0.3) !important;
-    }
-
-    .v-avatar {
-      background: rgba(255, 255, 255, 0.2) !important;
-      color: #ffffff !important;
-      font-weight: 600;
-    }
-  }
-
-  .grid {
-    &.grid-cols-2 {
-      gap: 1rem;
-    }
-  }
-
-  .v-img {
-    border-radius: 8px !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: scale(1.02);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-  }
-
-  .v-snackbar {
-    .v-snack__wrapper {
-      background: rgba(40, 40, 40, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px !important;
-      color: #e0e0e0 !important;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-
-    .v-btn {
-      color: #b0b0b0 !important;
-
-      &:hover {
-        color: #e0e0e0 !important;
-      }
-    }
-  }
-
-  .v-overlay {
-    background: rgba(0, 0, 0, 0.7) !important;
-
-    .v-dialog .v-card {
-      background: rgba(40, 40, 40, 0.95) !important;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px !important;
-
-      .v-card-text {
-        color: #e0e0e0 !important;
-      }
-
-      .v-progress-linear {
-        border-radius: 4px;
-
-        .v-progress-linear__background {
-          background: rgba(255, 255, 255, 0.1) !important;
-        }
-
-        .v-progress-linear__determinate,
-        .v-progress-linear__indeterminate .long,
-        .v-progress-linear__indeterminate .short {
-          background: #ffffff !important;
-        }
-      }
-    }
-  }
-
-  .v-divider {
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    opacity: 0.6;
-  }
-
-  .v-progress-circular {
-    color: #ffffff !important;
-  }
-
-  #employee-dept {
-    background: rgba(20, 20, 20, 0.5);
-    border-radius: 8px;
-    margin: 8px 0;
-  }
-
-  .v-messages {
-    color: #ff5252 !important;
-  }
-
-  .v-text-field .v-input__slot {
-    .v-text-field__details {
-      .v-messages {
-        color: #b0b0b0 !important;
-      }
-    }
-  }
-
-  .v-alert {
-    border-left: 0 !important;
-    border-right: 0 !important;
-    margin: 0 !important;
-    padding: 12px 16px !important;
-    background-color: rgba(33, 150, 243, 0.12) !important;
-    color: #ffffff !important;
-    border-radius: 4px !important;
-  }
-
-  .v-alert .v-icon {
-    color: #2196f3 !important;
-  }
-
-  body {
-    background-color: #121212 !important;
-  }
-
-  .v-main__wrap {
-    background: transparent !important;
-  }
-
-  .statistics-text,
-  .chart-text,
-  text,
-  tspan {
-    fill: #ffffff !important;
-    color: #ffffff !important;
-  }
-
-  svg text {
-    fill: #ffffff !important;
-  }
-
-  .recharts-text {
-    fill: #ffffff !important;
-  }
-
-  .recharts-cartesian-axis-tick-value {
-    fill: #ffffff !important;
-  }
-
-  .recharts-label {
-    fill: #ffffff !important;
-  }
-
-  .recharts-legend-item-text {
-    color: #ffffff !important;
-  }
-
-  canvas text {
-    color: #ffffff !important;
-  }
-
-  .chart-container * {
-    color: #ffffff !important;
-  }
-
-  .footer-white-box {
-    display: none !important;
-  }
-
-  .v-footer {
-    display: none !important;
-  }
-
-  .white-background-footer {
-    display: none !important;
   }
 }
 </style>
