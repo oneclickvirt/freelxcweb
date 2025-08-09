@@ -17,7 +17,7 @@
         <div class="text-center mb-8">
           <h1 class="text-4xl xl:text-5xl font-extrabold mb-4">
             <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-green-500">
-              spiritlhl的LXC容器共享网站
+              spiritlhl的LXC共享网站
             </span>
           </h1>
           <p class="text-xl text-gray-600">你可以在这里申请到你想要的免费容器</p>
