@@ -42,3 +42,11 @@ export function delLxc(id) {
     method: 'delete'
   })
 }
+
+// 获取容器运行信息列表
+export function getRunningInfoList() {
+  return request({
+    url: '/lxc/state/instanceInfoList',
+    method: 'get'
+  })
+}

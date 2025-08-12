@@ -4,40 +4,6 @@
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
         <h2>LXC</h2>
       </el-col>
-
-      <!-- <el-col :sm="24" :lg="12" style="padding-left: 50px">
-        <el-row>
-          <el-col :span="12">
-            <h2>技术选型</h2>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="6">
-            <h4>后端技术</h4>
-            <ul>
-              <li>SpringBoot</li>
-              <li>Sa-Token</li>
-              <li>JWT</li>
-              <li>MyBatis</li>
-              <li>Druid</li>
-              <li>Jackson</li>
-              <li>...</li>
-            </ul>
-          </el-col>
-          <el-col :span="6">
-            <h4>前端技术</h4>
-            <ul>
-              <li>Vue</li>
-              <li>Vuex</li>
-              <li>Element-ui</li>
-              <li>Axios</li>
-              <li>Sass</li>
-              <li>Quill</li>
-              <li>...</li>
-            </ul>
-          </el-col>
-        </el-row>
-      </el-col> -->
     </el-row>
     <el-divider />
     <instance-usage-chart :instance="{
@@ -60,6 +26,7 @@
 <script>
 import auth from '@/plugins/auth';
 import InstanceUsageChart from '@/components/InstanceUsageChart/instanceUsageChart.vue';
+import { getRunningInfoList } from '@/api/lxc/lxcAdmin';
 export default {
   name: "Index",
   components: {
@@ -69,7 +36,9 @@ export default {
     return {
       // 版本号
       version: "4.3.0",
-      ws: undefined
+      ws: undefined,
+      runningInfoMap: {},
+      trafficTotalLimit: undefined,
     };
   },
   mounted() {
@@ -84,9 +53,18 @@ export default {
         path: '/home'
       })
     }
-    this.connectWebSocket();
+    // this.connectWebSocket();
+    // setInterval(() => {
+      this.getRunningInfoList();
+    // }, 5000);
   },
   methods: {
+    getRunningInfoList() {
+      getRunningInfoList().then(res => {
+        this.runningInfoMap = res.data;
+        console.log("this.runningInfoMap:", this.runningInfoMap)
+      })
+    },
     goTarget(href) {
       window.open(href, "_blank");
     },

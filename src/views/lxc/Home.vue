@@ -4,7 +4,7 @@
       <template #icon>
         <v-icon color="primary" size="30">mdi-information-outline</v-icon>
       </template>
-      <div v-html="notice" class="notice"></div>
+      <div v-html="notice" ></div>
     </v-banner>
 
     <div class="grid grid-cols-1 xl:grid-cols-12 gap-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-12">
@@ -289,7 +289,7 @@ export default {
 #home {
   background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #2d2d2d 100%);
   min-height: 100vh;
-  padding-top: 80px;
+  padding-top: 65px;
 }
 
 .v-footer,
@@ -301,17 +301,18 @@ footer {
 
 .v-main {
   background: transparent !important;
-  padding-top: 24px !important;
+  padding-top: 0 !important;
 }
 
 .v-main__wrap {
   background: transparent !important;
-  padding-top: 20px;
+  padding-top: 0;
 }
 
 .v-banner {
   background: linear-gradient(45deg, #1a1a1a, #2d2d2d) !important;
   border: 1px solid #404040 !important;
+  width: 100% !important;
 
   .v-icon {
     color: #ffffff !important;
@@ -319,7 +320,7 @@ footer {
 }
 
 #home .notice ::v-deep p {
-  margin: 0 !important;
+  // margin: 0 !important;
   color: #e0e0e0 !important;
 }
 
@@ -509,16 +510,14 @@ video {
     gap: 1rem !important;
   }
 
-  .bg-gradient-to-br.from-blue-500.to-blue-600 {
-    margin-bottom: 0.5rem;
-  }
+  /* 移除空规则，避免 linter 警告 */
 
-  #home {
-    padding-top: 60px !important;
-  }
+    #home {
+      padding-top: 0 !important;
+    }
 
   .v-main__wrap {
-    padding-top: 15px !important;
+      padding-top: 0 !important;
   }
 }
 
@@ -526,9 +525,9 @@ video {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.v-banner {
-  margin-top: 1rem !important;
-}
+// .v-banner {
+//   margin-top: 1rem !important;
+// }
 
 @keyframes bounce {
 
