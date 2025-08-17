@@ -120,6 +120,7 @@
       <el-table-column width="120" label="到期时间" align="center" prop="dead" />
       <el-table-column label="小鸡名称前缀" align="center" prop="prefix" />
       <el-table-column label="ssh起始端口" align="center" prop="sshPortStart" />
+      <el-table-column label="宿主机流量使用限制" align="center" prop="trafficTotalLimit" />
       <el-table-column label="内存限制" align="center" prop="memoryLimit" />
       <el-table-column label="硬盘限制" align="center" prop="diskLimit" />
       <el-table-column label="外网起始端口" align="center" prop="netStartPort" />
@@ -216,7 +217,7 @@
           <el-col :span="12">
             <el-form-item label="流量总量限制" prop="trafficTotalLimit">
               <el-input placeholder="100" v-model="form.trafficTotalLimit" class="input-with-select">
-                <el-select v-model="unit" slot="append" style="width: 100px;" placeholder="GB">
+                <el-select v-model="trafficUnit" slot="append" style="width: 100px;" placeholder="">
                   <el-option label="TB" value="TB"></el-option>
                   <el-option label="GB" value="GB"></el-option>
                   <el-option label="MB" value="MB"></el-option>
@@ -292,7 +293,7 @@
             <el-form-item label="硬盘限制" prop="diskLimit">
               <!-- <el-input-number v-model="form.diskLimit" :min="1" placeholder="默认1G" /> -->
               <el-input placeholder="1" v-model="form.diskLimit" class="input-with-select">
-                <el-select v-model="unit" slot="append" style="width: 100px;" placeholder="GB">
+                <el-select v-model="diskUnit" slot="append" style="width: 100px;" placeholder="">
                   <el-option label="TB" value="TB"></el-option>
                   <el-option label="GB" value="GB"></el-option>
                   <el-option label="MB" value="MB"></el-option>
@@ -305,7 +306,7 @@
             <el-form-item label="内存限制" prop="memoryLimit">
               <!-- <el-input-number :min="1" v-model="form.memoryLimit" placeholder="默认256MB" /> -->
               <el-input placeholder="256" v-model="form.memoryLimit" class="input-with-select">
-                <el-select v-model="unit" slot="append" style="width: 100px;" placeholder="MB">
+                <el-select v-model="memUnit" slot="append" style="width: 100px;" placeholder="">
                   <el-option label="TB" value="TB"></el-option>
                   <el-option label="GB" value="GB"></el-option>
                   <el-option label="MB" value="MB"></el-option>
@@ -414,7 +415,11 @@ export default {
       // 遮罩层
       loading: true,
       // 流量单位
-      unit: 'GB',
+      trafficUnit: 'GB',
+      // 内存单位
+      memUnit: 'MB',
+      // 磁盘单位
+      diskUnit: 'GB',
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -832,25 +837,33 @@ export default {
       this.loading = true;
       listSuperLxc(this.queryParams).then((response) => {
         this.superLxcList = response.rows;
+        // console.log("this.superLxcList:", this.superLxcList)
         // 正则表达式分离出数字和字母
-        const matchTraffic = response.rows[0].trafficTotalLimit.match(/^(\d+)([a-zA-Z]+)$/);
-        if (matchTraffic) {
-          this.form.trafficTotalLimit = matchTraffic[1]; // "100"
-          this.unit = matchTraffic[2];   // "GB"
-          console.log(matchTraffic[1], matchTraffic[2]);
-        }
-        const matchDisk = response.rows[0].diskLimit.match(/^(\d+)([a-zA-Z]+)$/);
-        if (matchDisk) {
-          this.form.diskLimit = matchDisk[1]; // "1"
-          this.unit = matchDisk[2];   // "GB"
-          console.log(matchDisk[1], matchDisk[2]);
-        }
-        const matchMemory = response.rows[0].memoryLimit.match(/^(\d+)([a-zA-Z]+)$/);
-        if (matchMemory) {
-          this.form.memoryLimit = matchMemory[1]; // "256"
-          this.unit = matchMemory[2];   // "MB"
-          console.log(matchMemory[1], matchMemory[2]);
-        }
+        // 每一个superLxc都要取出数字和字母单位
+        // 遍历每个superLxc项提取数字和单位
+        this.superLxcList.forEach(item => {
+          // 提取流量限制的数字和单位
+          console.log("item.trafficTotalLimit:", item.trafficTotalLimit);
+          const matchTraffic = item.trafficTotalLimit?.match(/^(\d+)([a-zA-Z]+)$/);
+          if (matchTraffic) {
+            // item.trafficTotalLimit = matchTraffic[1]; // 数字部分
+            item.trafficUnit = matchTraffic[2];         // 单位部分
+          }
+          // 提取磁盘限制的数字和单位
+          console.log("item.diskLimit:", item.diskLimit);
+          const matchDisk = item.diskLimit?.match(/^(\d+)([a-zA-Z]+)$/);
+          if (matchDisk) {
+            // item.diskLimit = matchDisk[1]; // 数字部分
+            item.diskUnit = matchDisk[2];     // 单位部分
+          }
+          // 提取内存限制的数字和单位
+          console.log("item.memoryLimit:", item.memoryLimit);
+          const matchMemory = item.memoryLimit?.match(/^(\d+)([a-zA-Z]+)$/);
+          if (matchMemory) {
+            // item.memoryLimit = matchMemory[1]; // 数字部分
+            item.memUnit = matchMemory[2];        // 单位部分
+          }
+        });
         this.total = response.total;
         this.loading = false;
       });
@@ -943,11 +956,23 @@ export default {
       const id = row.id || this.ids;
       getSuperLxc(id).then((response) => {
         this.form = response.data;
-        const match = response.data.trafficTotalLimit.match(/^(\d+)([a-zA-Z]+)$/);
-        if (match) {
-          this.form.trafficTotalLimit = match[1]; // "100"
-          this.unit = match[2];   // "GB"
-          console.log(match[1], match[2]);
+        const matchTraffic = response.data.trafficTotalLimit.match(/^(\d+)([a-zA-Z]+)$/);
+        if (matchTraffic) {
+          this.form.trafficTotalLimit = matchTraffic[1]; // "100"
+          this.trafficUnit = matchTraffic[2];   // "GB"
+          console.log(matchTraffic[1], matchTraffic[2]);
+        }
+        const matchDisk = response.data.diskLimit.match(/^(\d+)([a-zA-Z]+)$/);
+        if (matchDisk) {
+          this.form.diskLimit = matchDisk[1]; // "100"
+          this.diskUnit = matchDisk[2];   // "GB"
+          console.log(matchDisk[1], matchDisk[2]);
+        }
+        const matchMemory = response.data.memoryLimit.match(/^(\d+)([a-zA-Z]+)$/);
+        if (matchMemory) {
+          this.form.memoryLimit = matchMemory[1]; // "100"
+          this.memUnit = matchMemory[2];   // "GB"
+          console.log(matchMemory[1], matchMemory[2]);
         }
         this.templateJson.rootLimits = JSON.parse(response.data.rootLimits);
         this.templateJson.instanceConfig = JSON.parse(response.data.instanceConfig);
@@ -967,9 +992,9 @@ export default {
         if (valid) {
           this.buttonLoading = true;
           if (this.form.id != null) {
-            this.form.trafficTotalLimit = this.form.trafficTotalLimit + this.unit;
-            this.form.diskLimit = this.form.diskLimit + this.unit;
-            this.form.memoryLimit = this.form.memoryLimit + this.unit;
+            this.form.trafficTotalLimit = this.form.trafficTotalLimit + this.trafficUnit;
+            this.form.diskLimit = this.form.diskLimit + this.diskUnit;
+            this.form.memoryLimit = this.form.memoryLimit + this.memUnit;
             updateSuperLxc(this.form)
               .then((response) => {
                 this.$modal.msgSuccess("修改成功");
@@ -980,9 +1005,9 @@ export default {
                 this.buttonLoading = false;
               });
           } else {
-            this.form.trafficTotalLimit = this.form.trafficTotalLimit + this.unit;
-            this.form.diskLimit = this.form.diskLimit + this.unit;
-            this.form.memoryLimit = this.form.memoryLimit + this.unit;
+            this.form.trafficTotalLimit = this.form.trafficTotalLimit + this.trafficUnit;
+            this.form.diskLimit = this.form.diskLimit + this.diskUnit;
+            this.form.memoryLimit = this.form.memoryLimit + this.memUnit;
             addSuperLxc(this.form)
               .then((response) => {
                 this.$modal.msgSuccess("新增成功");
