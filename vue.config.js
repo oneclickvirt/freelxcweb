@@ -40,8 +40,7 @@ module.exports = {
         target: `http://127.0.0.1:8088`,
         // target: `http://backound.spiritysdx.top`,
         changeOrigin: true,
-        // ws: false, // 是否启用websockets
-        ws: true, // 是否启用websockets
+        ws: false, // 是否启用websockets
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }

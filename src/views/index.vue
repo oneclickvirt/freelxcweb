@@ -55,7 +55,7 @@ export default {
     }
     // this.connectWebSocket();
     // setInterval(() => {
-      this.getRunningInfoList();
+      // this.getRunningInfoList();
     // }, 5000);
   },
   methods: {

@@ -191,7 +191,10 @@ export default {
     },
     loadChart() {
       this.$nextTick(() => {
-        const chart = echarts.init(document.getElementById("bar_chart"));
+        // const chart = echarts.init(document.getElementById("bar_chart"));
+        // 通过全局引入的方式，初始化图表时需要使用 window.echarts.init()
+        const chart = window.echarts.init(document.getElementById("bar_chart"));
+
         chart.setOption(this.createChartOption("本站空闲主机地区分布", this.lxcOnLineList));
 
         const usedChart = echarts.init(document.getElementById("bar_chart_used"));

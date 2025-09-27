@@ -493,20 +493,6 @@ export default {
           },
           rootLimits: {},
           sourceConfig: [
-            // {
-            //   "type":"image",
-            //   "alias":"debian/12",
-            //   "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
-            //   "protocol":"simplestreams",
-            //   "mode":"pull"
-            // },
-            // {
-            //   "type":"image",
-            //   "alias":"ubuntu/22.04",
-            //   "server":"https://images.opsmaru.dev/spaces/43ad54472be82d7236eea3d1",
-            //   "protocol":"simplestreams",
-            //   "mode":"pull"
-            // }
           ]
         }
       },
@@ -782,44 +768,48 @@ export default {
   },
   methods: {
     getImageAlias() {
-      // this.lxcConfig.templateJson.sourceConfig = [];
-      // this.incusConfig.templateJson.sourceConfig = [];
       getImageAlias(this.form.way).then((response) => {
         console.log(response.data);
         let aliases = response.data;
         if ("lxd" === this.form.way) {
+          this.lxdConfig.templateJson.sourceConfig = [];
           aliases.forEach(alias => {
             this.lxdConfig.templateJson.sourceConfig.push({
               "type": "image",
               "alias": alias,
-              // "remoteImage": "spiritlhl", // 远程镜像源直接写死
               "server": "https://lxdimages.spiritlhl.net/",
               "protocol": "simplestreams",
               "mode": "pull"
             });
           });
-          // console.log('this.lxcConfig.templateJson.sourceConfig:', this.lxcConfig.templateJson.sourceConfig);
+          console.log('this.lxcConfig.templateJson.sourceConfig:', this.lxcConfig.templateJson.sourceConfig);
         } else if ("incus" === this.form.way) {
+          this.incusConfig.templateJson.sourceConfig = [];
           aliases.forEach(alias => {
             this.incusConfig.templateJson.sourceConfig.push({
               "type": "image",
               "alias": alias,
-              // "remoteImage": "spiritlhl", // 远程镜像源直接写死
               "server": "https://lxdimages.spiritlhl.net/",
               "protocol": "simplestreams",
               "mode": "pull"
             });
           });
-          // console.log('this.incusConfig.templateJson.sourceConfig:', this.incusConfig.templateJson.sourceConfig);
+          console.log('this.incusConfig.templateJson.sourceConfig:', this.incusConfig.templateJson.sourceConfig);
         }
       });
     },
     changeWay(val) {
       console.log(val)
       if("lxd" === this.form.way) {
-        this.templateJson.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
+        setInterval(() => {
+          this.templateJson.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
+        }, 1000);
+        // this.templateJson.sourceConfig = this.lxdConfig.templateJson.sourceConfig;
       }else if("incus" === this.form.way){
-        this.templateJson.sourceConfig = this.incusConfig.templateJson.sourceConfig;
+        setInterval(() => {
+          this.templateJson.sourceConfig = this.incusConfig.templateJson.sourceConfig;
+        }, 1000);
+        // this.templateJson.sourceConfig = this.incusConfig.templateJson.sourceConfig;
       }
     },
 

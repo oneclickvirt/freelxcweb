@@ -16,7 +16,7 @@ const whiteList = [
   "/auth-redirect",
   "/bind",
   "/register",
-  "/"
+  "/admin/index"
 ];
 
 router.beforeEach((to, from, next) => {

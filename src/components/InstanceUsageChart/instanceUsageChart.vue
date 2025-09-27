@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import * as echarts from 'echarts';
+
 
 export default {
   name: 'InstanceUsageChart',
@@ -59,7 +59,9 @@ export default {
       const trafficFree = Math.max(0, limits.network - trafficUsed);
 
       // === 柱形图配置 ===
-      this.barChart = echarts.init(this.$refs.barChart);
+      // this.barChart = echarts.init(this.$refs.barChart);
+      // 通过全局引入的方式，初始化图表时需要使用 window.echarts.init()
+      this.barChart = window.echarts.init(this.$refs.barChart);
       this.barChart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -104,7 +106,10 @@ export default {
       });
 
       const usedPercent = ((trafficUsed / (trafficUsed + trafficFree)) * 100).toFixed(1);
-      this.pieChart = echarts.init(this.$refs.pieChart);
+      // this.pieChart = echarts.init(this.$refs.pieChart);
+      // 通过全局引入的方式，初始化图表时需要使用 window.echarts.init()
+      this.pieChart = window.echarts.init(this.$refs.pieChart);
+
       this.pieChart.setOption({
         tooltip: {
           trigger: 'item',
