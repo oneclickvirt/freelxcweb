@@ -1,4 +1,97 @@
 <template>
+  <div class="container-info">
+    <div v-for="(containers, ip) in instancesRunningInfo" :key="ip" class="ip-group">
+      <h3>IP: {{ ip }}</h3>
+      <div v-for="container in containers" :key="container.instancename" class="container-info-item">
+        <p>instancename: {{ container.instancename }}</p>
+        <p>cpu: {{ container.cpuUsage }}</p>
+        <p>memory: {{ container.memory }}</p>
+        <p>disk: {{ container.disk }}</p>
+        <el-card :header="`实例: ${container.instancename}`">
+          <div class="progress-container">
+            <el-progress
+              v-for="(value, resource) in container.resources"
+              :key="resource"
+              :percentage="(value.used / value.total) * 100"
+              :stroke-width="18"
+              :text-inside="true"
+              :show-text="true"
+              :color="getProgressColor(resource)"
+              :format="getProgressText(resource, value.used, value.total)"
+            >
+            </el-progress>
+          </div>
+        </el-card>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'InstanceUsageChart',
+  props: {
+    instancesRunningInfo: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+    // 根据资源类型动态返回进度条颜色
+    getProgressColor(resource) {
+      switch (resource) {
+        case 'cpu':
+          return '#67C23A'; // Green
+        case 'memory':
+          return '#E6A23C'; // Orange
+        case 'disk':
+          return '#F56C6C'; // Red
+        default:
+          return '#409EFF'; // Blue
+      }
+    },
+    // 格式化进度条上的显示文本
+    getProgressText(resource, used, total) {
+      return `${resource.toUpperCase()}: ${this.formatBytes(used)} / ${this.formatBytes(total)} (${((used / total) * 100).toFixed(1)}%)`;
+    },
+    // 字节转化为适合展示的格式
+    formatBytes(bytes) {
+      if (bytes >= 1024 ** 3) return (bytes / 1024 ** 3).toFixed(2) + ' GB';
+      if (bytes >= 1024 ** 2) return (bytes / 1024 ** 2).toFixed(2) + ' MB';
+      if (bytes >= 1024) return (bytes / 1024).toFixed(2) + ' KB';
+      return bytes + ' B';
+    }
+  }
+};
+</script>
+
+<style scoped>
+.container-info {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+}
+
+.ip-group {
+  margin-bottom: 40px;
+}
+
+.container-info-item {
+  margin-bottom: 20px;
+}
+
+.progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+</style>
+
+
+
+
+
+<!-- <template>
   <div class="chart-wrapper">
     <el-card :header="`实例资源使用 - ${instance.instancename}`">
       <div class="chart-container">
@@ -182,4 +275,4 @@ export default {
   min-width: 150px;
   height: 200px;
 }
-</style>
+</style> -->

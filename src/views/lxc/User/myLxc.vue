@@ -67,10 +67,10 @@
 
       <v-divider class="my-6"></v-divider>
       <!-- 已过期，待回收 / 流量已用完-->
-      <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0">
-        <div v-if="myLxcItem.filter(item => item.lxcStatus === '7').length > 0" class="text-h5 mb-4 grey--text">已过期，待回收</div>
+      <div v-if="myLxcItem.filter(item => item.lxcStatus === '7' || item.lxcStatus === '5').length > 0">
+        <div v-if="myLxcItem.filter(item => item.lxcStatus === '7' || item.lxcStatus === '5').length > 0" class="text-h5 mb-4 grey--text">已过期，待回收</div>
         <v-row>
-          <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '7')"
+          <v-col cols="12" sm="6" md="4" v-for="(myLxc, i) in myLxcItem.filter(item => item.lxcStatus === '7' || item.lxcStatus === '5')"
             :key="i">
             <v-card outlined>
               <v-card-text>
