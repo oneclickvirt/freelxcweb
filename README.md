@@ -339,10 +339,11 @@ http {
 }
 ```
 
-
-
 ## openresty反向代理绑定域名
+
 通过1panel进行静态网站的部署，openresty的配置文件如下，部署到ip为157.254.174.210的服务器上，其中反向代理的部分（/prod-api/、/monitor/admin/、/xxl-job-admin/可以直接在openresty应用中设置，然后注释掉配置文件里location中相应的配置）：
+
+```shell
 server {
     listen 1024 default_server; 
     # 监听1024端口，设为默认服务（IP访问必加）
@@ -411,3 +412,4 @@ server {
     # 【关键】注释代理配置（若无需反向代理，直接注释；若需代理，需单独配置不冲突的location）
     # include /www/sites/157.254.174.210/proxy/*.conf;
 }
+```
