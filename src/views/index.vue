@@ -276,7 +276,39 @@ export default {
         const res = await getRunningInfoList();  // 改用await语法更清晰
         if (res.code === 200) {
           this.instanceMap = res.data;
+          // ai生成点数据看看效果
+          // this.instanceMap = {
+          //   '31.22.111.75': [
+          //     {
+          //       instancename: 'alice1',
+          //       cpuUsage: 0.23,
+          //       memory: 178 * 1024 * 1024, // 512MB
+          //       memLimit: 1024 * 1024 * 1024, // 1GB
+          //       disk: 1.2 * 1024 * 1024 * 1024, // 1.2GB
+          //       diskLimit: 2 * 1024 * 1024 * 1024 // 2GB
+          //     },
+          //     {
+          //       instancename: 'alice2',
+          //       cpuUsage: 0.67,
+          //       memory: 280 * 1024 * 1024, // 280MB
+          //       memLimit: 1024 * 1024 * 1024, // 1GB
+          //       disk: 1.5 * 1024 * 1024 * 1024, // 1.5GB
+          //       diskLimit: 2 * 1024 * 1024 * 1024 // 2GB
+          //     }
+          //   ],
+          //   '62.60.156.173': [
+          //     {
+          //       instancename: 'aezaTest1',
+          //       cpuUsage: 0.12,
+          //       memory: 364 * 1024 * 1024, // 200MB
+          //       memLimit: 1024 * 1024 * 1024, // 1GB
+          //       disk: 0.82 * 1024 * 1024 * 1024, // 820MB
+          //       diskLimit: 2 * 1024 * 1024 * 1024 // 2GB
+          //     }
+          //   ]
+          // };
           console.log("this.instanceMap:", this.instanceMap);
+          
         } else {
           this.$message.error('获取容器状态失败：' + res.msg);
         }

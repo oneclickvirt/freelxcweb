@@ -4,7 +4,7 @@
   "description": "lxc",
   "scripts": {
     "dev": "vue-cli-service serve",
-    "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "build:prod": "vue-cli-service build",
     "preview": "node build/index.js --preview",
     "lint": "eslint --ext .js,.vue src",
     "report": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --report"

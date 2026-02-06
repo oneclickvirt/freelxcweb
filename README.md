@@ -20,9 +20,12 @@ npm i --legacy-peer-deps
 
 # 启动服务
 npm run dev
+
+`项目启动不了时，检查package.json文件，查看版本号是否正确，之前遇到过e-charts自动升级更新了，前端启动不起来的情况`
 ```
 
-浏览器访问 http://localhost:80
+<!-- 浏览器访问 http://localhost:80 -->
+浏览器访问 http://localhost:1024   # 端口号在vue.config.js中配置const port = 1024
 
 ## 发布
 
@@ -32,6 +35,7 @@ npm run build:stage
 
 # 构建生产环境
 npm run build:prod
+对应的nginx或openresty的配置文件如下，根据选择的前端部署方式进行配置，建议使用1panel面板或宝塔面板部署
 ```
 
 
@@ -337,3 +341,73 @@ http {
 
 
 
+## openresty反向代理绑定域名
+通过1panel进行静态网站的部署，openresty的配置文件如下，部署到ip为157.254.174.210的服务器上，其中反向代理的部分（/prod-api/、/monitor/admin/、/xxl-job-admin/可以直接在openresty应用中设置，然后注释掉配置文件里location中相应的配置）：
+server {
+    listen 1024 default_server; 
+    # 监听1024端口，设为默认服务（IP访问必加）
+    # 服务器标识（IP访问无需修改，域名访问才需替换）
+    server_name 157.254.174.210;  
+    # 静态文件根目录（核心：确保该路径下有index.html）
+    root /www/sites/157.254.174.210/index/dist; 
+    # 默认首页文件（优先找index.html，适配所有前端框架）
+    index index.html index.htm; 
+    # 访问日志（记录正常请求，便于排查）
+    access_log /www/sites/157.254.174.210/log/access.log main; 
+    # 错误日志（记录404/403等异常，关键排查依据）
+    error_log /www/sites/157.254.174.210/log/error.log warn; 
+    # 安全规则：禁止访问敏感文件（保留，不影响静态页）
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md) {
+        return 404; 
+    }
+    # ACME证书验证目录（保留，用于HTTPS证书申请，不影响HTTP访问）
+    location ^~ /.well-known/acme-challenge {
+        allow all; 
+        root /usr/share/nginx/html; 
+    }
+    # 安全规则：禁止.well-known目录下执行脚本（保留）
+    if ( $uri ~ "^/\.well-known/.*\.(php|jsp|py|js|css|lua|ts|go|zip|tar\.gz|rar|7z|sql|bak)$" ) {
+        return 403; 
+    }
+    location / {
+        try_files $uri $uri/ /index.html last; 
+        index index.html; 
+    }
+    location /prod-api/ {
+        proxy_set_header Host $http_host; 
+        proxy_set_header X-Real-IP $remote_addr; 
+        proxy_set_header REMOTE-HOST $remote_addr; 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+        proxy_set_header X-Forwarded-Proto $scheme; 
+        # 注意注意注意！：下面的地址是ip:8088 + /，少了斜杠/，访问 http://ip:1024/prod-api/xxx 时会被代理到 http://ip:8088/prod-api/xxx，而不是http://ip:8088/xxx，前端发起请求时会报500错误
+        proxy_pass http://157.254.174.210:8088/; 
+    }
+    # https 会拦截内链所有的 http 请求 造成功能无法使用
+    # 解决方案1 将 admin 服务 也配置成 https
+    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
+    location /monitor/admin/ {
+        proxy_set_header Host $http_host; 
+        proxy_set_header X-Real-IP $remote_addr; 
+        proxy_set_header REMOTE-HOST $remote_addr; 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+        proxy_pass http://157.254.174.210:9200/admin/; 
+    }
+    # https 会拦截内链所有的 http 请求 造成功能无法使用
+    # 解决方案1 将 xxljob 服务 也配置成 https
+    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
+    location /xxl-job-admin/ {
+        proxy_set_header Host $http_host; 
+        proxy_set_header X-Real-IP $remote_addr; 
+        proxy_set_header REMOTE-HOST $remote_addr; 
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
+        proxy_pass http://157.254.174.210:9100/xxl-job-admin/; 
+    }
+    # 限制外网访问内网 actuator 相关路径
+    location ~ ^(/[^/]*)?/actuator(/.*)?$ {
+        return 403;
+    }
+    # 404错误页（确保root目录下有404.html，无则可删除或注释）
+    error_page 404 /404.html; 
+    # 【关键】注释代理配置（若无需反向代理，直接注释；若需代理，需单独配置不冲突的location）
+    # include /www/sites/157.254.174.210/proxy/*.conf;
+}
