@@ -2,10 +2,7 @@
 
 本项目是基于 Vue 2 的前端管理系统（项目名：SL-LXC）。
 
-文档目标：
-- 提供可直接落地的开发、构建、部署说明
-- 所有示例 IP/域名统一脱敏（使用 `xxxx`）
-- 注释与说明统一为中文，减少理解歧义
+对应的后端代码见：https://github.com/oneclickvirt/freelxcserver
 
 ## 环境要求
 
