@@ -1,415 +1,263 @@
-## 开发
+## 项目说明
+
+本项目是基于 Vue 2 的前端管理系统（项目名：SL-LXC）。
+
+文档目标：
+- 提供可直接落地的开发、构建、部署说明
+- 所有示例 IP/域名统一脱敏（使用 `xxxx`）
+- 注释与说明统一为中文，减少理解歧义
+
+## 环境要求
+
+- Node.js：16.x（与项目 `package.json` 保持一致）
+- npm：>= 6
+- 建议操作系统：Linux（生产环境）
+
+## 本地开发
 
 ```bash
-# 克隆项目
-git clone https://gitee.com/y_project/RuoYi-Vue
+# 1) 进入项目目录
+cd freelxcweb
 
-# 进入项目目录
-cd ruoyi-ui
+# 2) 可选：设置 npm 镜像源（提升下载速度）
+npm config set registry https://registry.npmmirror.com
 
-# 更改镜像源
-npm config set registry https://registry.npm.taobao.org
-
-# 安装依赖
-# npm install
-# 或
+# 3) 安装依赖（推荐）
 npm i --legacy-peer-deps
 
-# 建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
-# npm install --registry=https://registry.npmmirror.com
-
-# 启动服务
+# 4) 启动开发服务
 npm run dev
-
-`项目启动不了时，检查package.json文件，查看版本号是否正确，之前遇到过e-charts自动升级更新了，前端启动不起来的情况`
 ```
 
-<!-- 浏览器访问 http://localhost:80 -->
-浏览器访问 http://localhost:1024   # 端口号在vue.config.js中配置const port = 1024
+启动后访问：
+- http://localhost:1024
 
-## 发布
+说明：
+- 开发端口在 `vue.config.js` 中配置，当前为 `1024`。
+- 若安装依赖报冲突，优先使用 `npm i --legacy-peer-deps`。
+- 不建议使用 `cnpm`，避免出现依赖解析差异导致的异常。
+
+## 构建与预览
 
 ```bash
-# 构建测试环境
-npm run build:stage
-
-# 构建生产环境
+# 构建生产包（输出到 dist 目录）
 npm run build:prod
-对应的nginx或openresty的配置文件如下，根据选择的前端部署方式进行配置，建议使用1panel面板或宝塔面板部署
+
+# 本地预览构建产物（可选）
+npm run preview
 ```
 
+说明：
+- 当前项目有效构建命令为 `build:prod`。
+- 文档中的 `build:stage` 并非本项目默认脚本，如需使用请先在 `package.json` 中新增。
 
+## 关键配置说明
 
-## nginx部署代理
+### 1. 前端环境变量
 
-- 在宝塔面板安装nginx，先完成由服务器ip:port访问的部署（“网站”->“HTML项目”）。本项目监听80端口
+- 开发环境：`.env.development`
+  - `VUE_APP_BASE_API='/dev-api'`
+  - `VUE_APP_CONTEXT_PATH='/'`
+- 生产环境：`.env.production`
+  - `VUE_APP_BASE_API='/prod-api'`
+  - `VUE_APP_CONTEXT_PATH='/'`
 
-![image-20241008221913933](C:\Users\86138\AppData\Roaming\Typora\typora-user-images\image-20241008221913933.png)
+### 2. 代理与接口前缀关系
 
-- 其配置文件如下：
+开发环境（`npm run dev`）下：
+- 浏览器请求 `/dev-api/*`
+- 由 `vue.config.js` 代理到 `http://127.0.0.1:8088/*`
+
+生产环境（Nginx/OpenResty）下：
+- 浏览器请求 `/prod-api/*`
+- 由 Nginx/OpenResty 反向代理到后端服务
+
+## 生产部署（Nginx）
+
+以下为通用模板，所有 IP/域名已脱敏，请按实际环境替换。
 
 ```nginx
-upstream server {
-    # ip_hash;
-    server 127.0.0.1:8088;
-    server 127.0.0.1:8089;
-    # server 127.0.0.1:9090;
+# 后端 API 服务（可配置多实例做负载均衡）
+upstream backend_api {
+    server xxxx:8088;
+    # server xxxx:8089;
 }
 
-upstream monitor-admin {
-    server 127.0.0.1:9200;
-   
+# 监控服务
+upstream monitor_admin {
+    server xxxx:9200;
 }
 
-upstream xxljob-admin {
-    server 127.0.0.1:9100;
+# xxl-job 服务
+upstream xxl_job_admin {
+    server xxxx:9100;
 }
-server
-{
+
+server {
+    # 前端对外访问端口
     listen 80;
-    server_name 94.154.37.20;
-    # server_name lxc.spiritlhl.top;
-    index index.html index.htm default.htm default.html;
+
+    # 对外访问域名（或公网 IP）
+    server_name xxxx;
+
+    # 前端静态资源目录（dist 所在目录）
     root /opt/project/freelxc/lxcweb/dist;
-    #CERT-APPLY-CHECK--START
-    # 用于SSL证书申请时的文件验证相关配置 -- 请勿删除并保持这段设置在优先级高的位置
-    include /www/server/panel/vhost/nginx/well-known/94.154.37.20.conf;
-    #CERT-APPLY-CHECK--END
+    index index.html index.htm;
 
-    #SSL-START SSL相关配置，请勿删除或修改下一行带注释的404规则
-    #error_page 404/404.html;
-    #SSL-END
-
-    #ERROR-PAGE-START  错误页配置，可以注释、删除或修改
-    #error_page 404 /404.html;
-    #error_page 502 /502.html;
-    #ERROR-PAGE-END
-
-    #REWRITE-START URL重写规则引用,修改后将导致面板设置的伪静态规则失效
-    include /www/server/panel/vhost/rewrite/html_94.154.37.20.conf;
-    #REWRITE-END
-    
+    # 前端路由回退（history 模式必须保留）
     location / {
-        root   /opt/project/freelxc/lxcweb/dist;
         try_files $uri $uri/ /index.html;
-        index  index.html index.htm;
     }
 
+    # 后端接口代理
     location /prod-api/ {
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass http://server/;
+
+        # 注意：proxy_pass 末尾必须带 /
+        # 否则 /prod-api/xxx 可能被错误转发为 /prod-api/xxx（路径不被剥离）
+        proxy_pass http://backend_api/;
     }
-    
-    # https 会拦截内链所有的 http 请求 造成功能无法使用
-    # 解决方案1 将 admin 服务 也配置成 https
-    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
+
+    # 监控页面代理
     location /monitor/admin/ {
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass http://monitor-admin/admin/;
+        proxy_pass http://monitor_admin/admin/;
     }
 
-    # https 会拦截内链所有的 http 请求 造成功能无法使用
-    # 解决方案1 将 xxljob 服务 也配置成 https
-    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
+    # xxl-job 页面代理
     location /xxl-job-admin/ {
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header REMOTE-HOST $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_pass http://xxljob-admin/xxl-job-admin/;
+        proxy_pass http://xxl_job_admin/xxl-job-admin/;
     }
 
-    #禁止访问的文件或目录
-    location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md)
-    {
-        return 404;
-    }
-
-    #一键申请SSL证书验证目录相关设置
-    location ~ \.well-known{
-        allow all;
-    }
-
-    #禁止在证书验证目录放入敏感文件
-    if ( $uri ~ "^/\.well-known/.*\.(php|jsp|py|js|css|lua|ts|go|zip|tar\.gz|rar|7z|sql|bak)$" ) {
-        return 403;
-    }
-
-    location ~ .*\\.(gif|jpg|jpeg|png|bmp|swf)$
-    {
-        expires      30d;
-        error_log /dev/null;
-        access_log /dev/null;
-    }
-
-    location ~ .*\\.(js|css)?$
-    {
-        expires      12h;
-        error_log /dev/null;
-        access_log /dev/null;
-    }
-    access_log  /www/wwwlogs/94.154.37.20.log;
-    error_log  /www/wwwlogs/94.154.37.20.error.log;
-}
-```
-
-> /prod-api的请求转发到了127.0.0.1的8088和8089端口；monitor监控转发到9200端口，加上/admin；xxl-job定时任务转发到9100端口，加上/xxl-job-admin
-
-
-
-## nginx反向代理绑定域名
-
-- 将服务器的/etc/hosts文件内将解析好的域名（lxc.spiritlhl.top）和部署的本机ip地址（94.154.37.20）绑定
-
-  ![image-20241008222543336](C:\Users\86138\AppData\Roaming\Typora\typora-user-images\image-20241008222543336.png)
-
-- 在宝塔的“网站”->“反向代理”，添加域名和前面部署的ip:port绑定（如果有其他资源需要配置，需要在配置文件中另外添加）
-
-  ![image-20241008222738979](C:\Users\86138\AppData\Roaming\Typora\typora-user-images\image-20241008222738979.png)
-
-## 手动安装的nginx的配置文件绑定域名
-
-更改nginx-1.x.x文件夹下/conf/nginx.conf文件，将配置改为
-
-```nginx
-user  root;
-worker_processes  1;
-
-error_log  /opt/software/nginx-1.12.2/logs/error.log debug;
-pid        /opt/software/nginx-1.12.2/logs/nginx.pid;
-
-
-#error_log  logs/error.log;
-#error_log  logs/error.log  notice;
-#error_log  logs/error.log  info;   
-
-#pid        logs/nginx.pid;
-
-
-events {
-    worker_connections  1024;
-}
-
-
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-
-    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-    #                  '$status $body_bytes_sent "$http_referer" '
-    #                  '"$http_user_agent" "$http_x_forwarded_for"';
-
-    #access_log  logs/access.log  main;
-
-    sendfile        on;
-    #tcp_nopush     on;
-
-    #keepalive_timeout  0;
-    keepalive_timeout  65;
-
-    # 限制body大小
-    # client_max_body_size 100m;
-
-    #gzip  on;
-
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                          '$status $body_bytes_sent "$http_referer" '
-                          '"$http_user_agent" "$http_x_forwarded_for"';
-
-    access_log  /opt/software/nginx-1.12.2/logs/access.log  main;
-    # 访问域名时转发的地址+端口，设置多个server属性可做负载均衡
-    upstream server {
-        # ip_hash;
-        server 127.0.0.1:8088;
-        # server 127.0.0.1:8081;
-        # server 127.0.0.1:9090;
-    }
-    # 启动不同服务需要代理到不同端口
-    upstream monitor-admin {
-        server 127.0.0.1:9200;
-        
-    }
-
-    upstream xxljob-admin {
-        server 127.0.0.1:9100;
-    }
-
-    server {
-        # 监听本服务器的某个端口
-        listen       80;
-        # 将域名替换localhost
-        server_name lxc.spiritlhl.top;
-        # server_name  localhost;
-
-        #charset koi8-r;
-
-        #access_log  logs/host.access.log  main;
-        
-        # location = /index.html {
-        #     add_header Cache-Control "no-cache, no-store";
-        # }
-
-        location / {
-            root   /opt/project/freelxc/lxcweb/dist;
-            try_files $uri $uri/ /index.html;
-            index  index.html index.htm;
-        }
-
-        location /prod-api/ {
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header REMOTE-HOST $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_pass http://server/;
-            # proxy_pass http://lxc.spiritysdx.top; 这个写法可能需要在服务器的/etc/hosts文件中添加本机ip与域名的对应
-        }
-
-        # https 会拦截内链所有的 http 请求 造成功能无法使用
-        # 解决方案1 将 admin 服务 也配置成 https
-        # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
-        
-        location /monitor/admin/ {
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header REMOTE-HOST $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_pass http://monitor-admin/admin/;
-        }
-
-        # https 会拦截内链所有的 http 请求 造成功能无法使用
-        # 解决方案1 将 xxljob 服务 也配置成 https
-        # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
-        
-        location /xxl-job-admin/ {
-            proxy_set_header Host $http_host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header REMOTE-HOST $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_pass http://xxljob-admin/xxl-job-admin/;
-        }
-
-        # 限制外网访问内网 actuator 相关路径
-        location ~ ^(/[^/]*)?/actuator(/.*)?$ {
-            return 403;
-        }
-
-
-        #error_page  404              /404.html;
-
-        # redirect server error pages to the static page /50x.html
-        #
-        error_page   500 502 503 504  /50x.html;
-        location = /50x.html {
-            root   html;
-        }
-
-        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
-        #
-        #location ~ \.php$ {
-        #    proxy_pass   http://127.0.0.1;
-        #}
-
-        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
-        #
-        #location ~ \.php$ {
-        #    root           html;
-        #    fastcgi_pass   127.0.0.1:9000;
-        #    fastcgi_index  index.php;
-        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
-        #    include        fastcgi_params;
-        #}
-
-        # deny access to .htaccess files, if Apache's document root
-        # concurs with nginx's one
-        #
-        #location ~ /\.ht {
-        #    deny  all;
-        #}
-    }
-    
-    # 其他server块配置
-}
-```
-
-## openresty反向代理绑定域名
-
-通过1panel进行静态网站的部署，openresty的配置文件如下，部署到ip为157.254.174.210的服务器上，其中反向代理的部分（/prod-api/、/monitor/admin/、/xxl-job-admin/可以直接在openresty应用中设置，然后注释掉配置文件里location中相应的配置）：
-
-```shell
-server {
-    listen 1024 default_server; 
-    # 监听1024端口，设为默认服务（IP访问必加）
-    # 服务器标识（IP访问无需修改，域名访问才需替换）
-    server_name 157.254.174.210;  
-    # 静态文件根目录（核心：确保该路径下有index.html）
-    root /www/sites/157.254.174.210/index/dist; 
-    # 默认首页文件（优先找index.html，适配所有前端框架）
-    index index.html index.htm; 
-    # 访问日志（记录正常请求，便于排查）
-    access_log /www/sites/157.254.174.210/log/access.log main; 
-    # 错误日志（记录404/403等异常，关键排查依据）
-    error_log /www/sites/157.254.174.210/log/error.log warn; 
-    # 安全规则：禁止访问敏感文件（保留，不影响静态页）
-    location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md) {
-        return 404; 
-    }
-    # ACME证书验证目录（保留，用于HTTPS证书申请，不影响HTTP访问）
-    location ^~ /.well-known/acme-challenge {
-        allow all; 
-        root /usr/share/nginx/html; 
-    }
-    # 安全规则：禁止.well-known目录下执行脚本（保留）
-    if ( $uri ~ "^/\.well-known/.*\.(php|jsp|py|js|css|lua|ts|go|zip|tar\.gz|rar|7z|sql|bak)$" ) {
-        return 403; 
-    }
-    location / {
-        try_files $uri $uri/ /index.html last; 
-        index index.html; 
-    }
-    location /prod-api/ {
-        proxy_set_header Host $http_host; 
-        proxy_set_header X-Real-IP $remote_addr; 
-        proxy_set_header REMOTE-HOST $remote_addr; 
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-        proxy_set_header X-Forwarded-Proto $scheme; 
-        # 注意注意注意！：下面的地址是ip:8088 + /，少了斜杠/，访问 http://ip:1024/prod-api/xxx 时会被代理到 http://ip:8088/prod-api/xxx，而不是http://ip:8088/xxx，前端发起请求时会报500错误
-        proxy_pass http://157.254.174.210:8088/; 
-    }
-    # https 会拦截内链所有的 http 请求 造成功能无法使用
-    # 解决方案1 将 admin 服务 也配置成 https
-    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
-    location /monitor/admin/ {
-        proxy_set_header Host $http_host; 
-        proxy_set_header X-Real-IP $remote_addr; 
-        proxy_set_header REMOTE-HOST $remote_addr; 
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-        proxy_pass http://157.254.174.210:9200/admin/; 
-    }
-    # https 会拦截内链所有的 http 请求 造成功能无法使用
-    # 解决方案1 将 xxljob 服务 也配置成 https
-    # 解决方案2 将菜单配置为外链访问 走独立页面 http 访问
-    location /xxl-job-admin/ {
-        proxy_set_header Host $http_host; 
-        proxy_set_header X-Real-IP $remote_addr; 
-        proxy_set_header REMOTE-HOST $remote_addr; 
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; 
-        proxy_pass http://157.254.174.210:9100/xxl-job-admin/; 
-    }
-    # 限制外网访问内网 actuator 相关路径
+    # 限制外网访问 actuator（按需保留）
     location ~ ^(/[^/]*)?/actuator(/.*)?$ {
         return 403;
     }
-    # 404错误页（确保root目录下有404.html，无则可删除或注释）
-    error_page 404 /404.html; 
-    # 【关键】注释代理配置（若无需反向代理，直接注释；若需代理，需单独配置不冲突的location）
-    # include /www/sites/157.254.174.210/proxy/*.conf;
+
+    # 禁止访问敏感文件
+    location ~ ^/(\.user.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README.md) {
+        return 404;
+    }
+
+    # 静态资源缓存策略（按需调整）
+    location ~ .*\.(gif|jpg|jpeg|png|bmp|swf)$ {
+        expires 30d;
+        access_log off;
+        error_log /dev/null;
+    }
+
+    location ~ .*\.(js|css)$ {
+        expires 12h;
+        access_log off;
+        error_log /dev/null;
+    }
 }
 ```
+
+### 域名绑定说明
+
+- 若使用域名访问，请先保证域名 DNS 已解析到服务器公网 IP。
+- 若服务器内部需要固定域名解析，可在 `/etc/hosts` 中增加映射：
+
+```text
+xxxx    your.domain.example
+```
+
+## 生产部署（OpenResty）
+
+若使用 1Panel/OpenResty，可参考以下模板：
+
+```nginx
+server {
+    # 按需监听端口，可改为 80/443
+    listen 1024 default_server;
+
+    # 对外访问域名或 IP
+    server_name xxxx;
+
+    # 前端 dist 目录
+    root /www/sites/xxxx/index/dist;
+    index index.html index.htm;
+
+    access_log /www/sites/xxxx/log/access.log main;
+    error_log  /www/sites/xxxx/log/error.log warn;
+
+    # 前端路由回退
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # 后端接口代理
+    location /prod-api/ {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header REMOTE-HOST $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # 注意：末尾 / 必须保留
+        proxy_pass http://xxxx:8088/;
+    }
+
+    # 监控页面代理
+    location /monitor/admin/ {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header REMOTE-HOST $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://xxxx:9200/admin/;
+    }
+
+    # xxl-job 页面代理
+    location /xxl-job-admin/ {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header REMOTE-HOST $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://xxxx:9100/xxl-job-admin/;
+    }
+
+    # 限制外网访问 actuator（按需保留）
+    location ~ ^(/[^/]*)?/actuator(/.*)?$ {
+        return 403;
+    }
+}
+```
+
+## 常见问题排查
+
+### 1. 页面打不开或白屏
+
+- 先确认前端是否已正常构建并部署 `dist` 目录。
+- 确认 Nginx/OpenResty 的 `root` 路径指向正确目录。
+- 确认 `location /` 中有 `try_files $uri $uri/ /index.html;`。
+
+### 2. 接口 404/500
+
+- 检查前端环境变量中 `VUE_APP_BASE_API` 与代理前缀是否一致。
+- 检查 `/prod-api/` 的 `proxy_pass` 是否带末尾 `/`。
+- 检查后端服务端口是否可达（8088/9200/9100）。
+
+### 3. HTTPS 下功能异常
+
+- 若页面为 HTTPS，而被代理系统为 HTTP，浏览器可能因混合内容策略拦截请求。
+- 解决方案：
+  - 统一改为 HTTPS；或
+  - 将相关地址改为独立外链页面访问。
+
+## 维护建议
+
+- 升级依赖前先锁定版本并进行测试，尤其是 `echarts` 等容易引发兼容问题的库。
+- 线上部署前，先在测试环境验证代理路径是否正确。
+- 将真实公网 IP、域名、账号等敏感信息放到私有文档，不写入公开仓库。
