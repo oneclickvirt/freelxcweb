@@ -4,6 +4,8 @@
 
 对应的后端代码见：https://github.com/oneclickvirt/freelxcserver
 
+本项目暂不做后续开发维护工作。
+
 ## 环境要求
 
 - Node.js：16.x（与项目 `package.json` 保持一致）
